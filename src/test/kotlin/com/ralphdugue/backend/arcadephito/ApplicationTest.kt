@@ -1,6 +1,6 @@
-package com.arcadephito.ralphdugue.backend.arcadephito
+package com.ralphdugue.backend.arcadephito
 
-import com.arcadephito.ralphdugue.backend.arcadephito.plugins.configureRouting
+import com.ralphdugue.backend.arcadephito.plugins.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.server.testing.*

@@ -1,7 +1,7 @@
-package com.arcadephito.ralphdugue.backend.arcadephito.controllers
+package com.ralphdugue.backend.arcadephito.data.repositories
 
-import com.arcadephito.ralphdugue.backend.arcadephito.data.db.UsersTable
-import com.arcadephito.ralphdugue.backend.arcadephito.data.models.User
+import com.ralphdugue.backend.arcadephito.data.db.UsersTable
+import com.ralphdugue.backend.arcadephito.data.models.User
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
 
 
-class UserControllerImpl(database: Database): UserController {
+class UserRepositoryImpl(database: Database): UserRepository {
 
     init {
         transaction(database) {

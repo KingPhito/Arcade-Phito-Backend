@@ -1,7 +1,7 @@
-package com.arcadephito.ralphdugue.backend.arcadephito.plugins
+package com.ralphdugue.backend.arcadephito.plugins
 
-import com.arcadephito.ralphdugue.backend.arcadephito.controllers.UserController
-import com.arcadephito.ralphdugue.backend.arcadephito.data.models.User
+import com.ralphdugue.backend.arcadephito.data.repositories.UserRepository
+import com.ralphdugue.backend.arcadephito.data.models.User
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
@@ -18,7 +18,7 @@ import org.koin.ktor.ext.inject
 
 fun Application.configureDatabases() {
 
-    val userService: UserController by inject()
+    val userService: UserRepository by inject()
     install(Resources)
     routing {
         // Create user

@@ -1,4 +1,4 @@
-package com.arcadephito.ralphdugue.backend.arcadephito.plugins
+package com.ralphdugue.backend.arcadephito.plugins
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*

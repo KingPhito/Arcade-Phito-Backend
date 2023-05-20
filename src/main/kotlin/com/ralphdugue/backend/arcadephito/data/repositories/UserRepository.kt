@@ -1,8 +1,8 @@
-package com.arcadephito.ralphdugue.backend.arcadephito.controllers
+package com.ralphdugue.backend.arcadephito.data.repositories
 
-import com.arcadephito.ralphdugue.backend.arcadephito.data.models.User
+import com.ralphdugue.backend.arcadephito.data.models.User
 
-interface UserController {
+interface UserRepository {
 
     suspend fun create(user: User): Int
 
