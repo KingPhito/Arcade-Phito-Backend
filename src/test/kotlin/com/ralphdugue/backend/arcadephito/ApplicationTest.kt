@@ -1,6 +1,6 @@
 package com.ralphdugue.backend.arcadephito
 
-import com.ralphdugue.backend.arcadephito.modules.HelloWorld
+import com.ralphdugue.backend.arcadephito.plugins.HelloWorld
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*

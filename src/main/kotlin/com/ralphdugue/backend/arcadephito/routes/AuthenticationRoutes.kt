@@ -1,9 +1,10 @@
-package com.ralphdugue.backend.arcadephito.modules
+package com.ralphdugue.backend.arcadephito.routes
 
 import com.ralphdugue.backend.arcadephito.data.repositories.UserRepository
-import com.ralphdugue.backend.arcadephito.data.models.User
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.ralphdugue.backend.arcadephito.domain.LoginFields
+import com.ralphdugue.backend.arcadephito.domain.RegistrationFields
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.http.*
@@ -15,14 +16,12 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
-import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
 
-fun Application.configureSecurity() {
+fun Application.configureAuthRoutes() {
 
     val secret = environment.config.property("jwt.secret").getString()
     val issuer = environment.config.property("jwt.issuer").getString()
@@ -81,9 +80,8 @@ fun Application.configureSecurity() {
     routing {
         post("/login"){
             val credentials = call.receive<LoginFields>()
-            val user = userService.read(credentials.username) ?: throw IllegalArgumentException("Unknown user")
-            val valid = BCrypt.checkpw(credentials.password, user.passwordHash)
-            if (valid) {
+            val user = userService.getUserFromLoginFields(credentials)
+            user?.let {
                 val token = JWT.create()
                     .withAudience(audience)
                     .withIssuer(issuer)
@@ -91,12 +89,12 @@ fun Application.configureSecurity() {
                     .withExpiresAt(Date(System.currentTimeMillis() + 60000))
                     .sign(Algorithm.HMAC256(secret))
                 call.sessions.set(UserSession(credentials.username))
-                call.respond(hashMapOf("token" to token))
-            } else call.respond(HttpStatusCode.NotFound)
+                call.respond(HttpStatusCode.Accepted, hashMapOf("token" to token, "user" to user))
+            } ?: call.respond(HttpStatusCode.NotFound)
         }
         post("/register") {
             val fields = call.receive<RegistrationFields>()
-            userService.create(fields.toUser())
+            val user = userService.createNewUser(fields.userTableRow())
             val token = JWT.create()
                 .withAudience(audience)
                 .withIssuer(issuer)
@@ -104,7 +102,10 @@ fun Application.configureSecurity() {
                 .withExpiresAt(Date(System.currentTimeMillis() + 60000))
                 .sign(Algorithm.HMAC256(secret))
             call.sessions.set(UserSession(fields.username))
-            call.respond(hashMapOf("token" to token))
+            call.respond(
+                HttpStatusCode.Created,
+                hashMapOf("token" to token, "user" to user)
+            )
         }
         get("/logout") {
             call.sessions.clear<UserSession>()
@@ -140,15 +141,5 @@ data class UserSession(
     fun isExpired() = System.currentTimeMillis() - createdAt > TimeUnit.DAYS.toMillis(7)
 }
 
-@Serializable
-data class LoginFields(val username: String, val password: String)
 
-@Serializable
-data class RegistrationFields(val email: String, val username: String, val password: String) {
-    fun toUser() = User(
-        email = email,
-        username = username,
-        passwordHash = BCrypt.hashpw(password, BCrypt.gensalt())
-    )
-}
 

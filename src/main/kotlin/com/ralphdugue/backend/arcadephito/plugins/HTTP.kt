@@ -1,4 +1,4 @@
-package com.ralphdugue.backend.arcadephito.modules
+package com.ralphdugue.backend.arcadephito.plugins
 
 import io.ktor.http.*
 import io.ktor.server.plugins.cors.routing.*
