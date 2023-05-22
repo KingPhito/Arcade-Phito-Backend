@@ -1,0 +1,30 @@
+image: gradle:alpine
+
+variables:
+  GOOGLE_CLI_URL: https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - chmod +x gradlew
+  - wget -O gcloud-sdk.tar.gz $GOOGLE_CLI_URL
+  - tar -xzf gcloud-sdk.tar.gz
+  - ./google-cloud-sdk/install.sh
+  - ./google-cloud-sdk/bin/gcloud components install app-engine-java
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+    stage: build
+    only:
+        - develop
+        - main
+    script:
+        - ./gradlew buildFatJar
+
+test:
+    stage: test
+    script:
+        - ./gradlew test

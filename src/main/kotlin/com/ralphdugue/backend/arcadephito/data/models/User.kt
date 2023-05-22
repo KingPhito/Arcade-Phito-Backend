@@ -1,4 +1,4 @@
-package com.arcadephito.ralphdugue.backend.arcadephito.data.models
+package com.ralphdugue.backend.arcadephito.data.models
 
 import kotlinx.serialization.Serializable
 

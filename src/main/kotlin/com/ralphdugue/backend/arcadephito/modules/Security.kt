@@ -1,7 +1,7 @@
-package com.arcadephito.ralphdugue.backend.arcadephito.plugins
+package com.ralphdugue.backend.arcadephito.modules
 
-import com.arcadephito.ralphdugue.backend.arcadephito.controllers.UserController
-import com.arcadephito.ralphdugue.backend.arcadephito.data.models.User
+import com.ralphdugue.backend.arcadephito.data.repositories.UserRepository
+import com.ralphdugue.backend.arcadephito.data.models.User
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.client.*
@@ -29,7 +29,7 @@ fun Application.configureSecurity() {
     val audience = environment.config.property("jwt.audience").getString()
     val myRealm = environment.config.property("jwt.realm").getString()
 
-    val userService: UserController by inject()
+    val userService: UserRepository by inject()
     install(Sessions) {
         cookie<UserSession>("user_session", SessionStorageMemory()) {
             cookie.path = "/"
