@@ -1,4 +1,4 @@
-package com.ralphdugue.backend.arcadephito.plugins
+package com.ralphdugue.backend.arcadephito.modules
 
 import io.ktor.server.routing.*
 import io.ktor.server.response.*

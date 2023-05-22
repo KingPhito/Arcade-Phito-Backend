@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.20'
 }
 
-group "com.ralphdugue.backend.arcade-phito"
+group "com.ralphdugue.backend.arcadephito"
 version "0.0.1"
 mainClassName = "com.ralphdugue.backend.arcadephito.ApplicationKt"
 
@@ -23,6 +23,7 @@ dependencies {
     implementation "io.ktor:ktor-network-tls-certificates:$ktor_version"
     implementation "io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version"
     implementation "io.ktor:ktor-server-content-negotiation-jvm:$ktor_version"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
     implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
     implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
     implementation "io.insert-koin:koin-ktor:$koin_ktor"

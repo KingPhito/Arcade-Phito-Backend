@@ -24,3 +24,7 @@ build:
     script:
         - ./gradlew buildFatJar
 
+test:
+    stage: test
+    script:
+        - ./gradlew test

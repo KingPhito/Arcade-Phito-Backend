@@ -1,4 +1,4 @@
-package com.ralphdugue.backend.arcadephito.plugins
+package com.ralphdugue.backend.arcadephito.modules
 
 import com.ralphdugue.backend.arcadephito.data.repositories.UserRepository
 import com.ralphdugue.backend.arcadephito.data.models.User

@@ -1,7 +1,7 @@
 package com.ralphdugue.backend.arcadephito
 
 import com.ralphdugue.backend.arcadephito.di.appModule
-import com.ralphdugue.backend.arcadephito.plugins.*
+import com.ralphdugue.backend.arcadephito.modules.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import org.koin.ktor.plugin.Koin
@@ -20,3 +20,4 @@ fun Application.module() {
     configureDatabases()
     configureHTTP()
 }
+
