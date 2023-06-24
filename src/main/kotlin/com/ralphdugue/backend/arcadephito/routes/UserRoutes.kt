@@ -22,7 +22,7 @@ fun Application.configureUserRoutes() {
     install(Resources)
     routing {
         // Create user
-        authenticate("auth-oauth-google", "auth-jwt") {
+        authenticate("auth-jwt") {
             post<Users> {
                 val user = call.receive<UserTableRow>()
                 val id = userService.createNewUser(user)
