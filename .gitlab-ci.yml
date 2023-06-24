@@ -6,14 +6,6 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
-  - wget -O gcloud-sdk.tar.gz $GOOGLE_CLI_URL
-  - tar -xzf gcloud-sdk.tar.gz
-  - ./google-cloud-sdk/install.sh
-  - export PATH=$PATH:$PWD/google-cloud-sdk/bin
-  - gcloud components install app-engine-java
-  - gcloud config set project $GOOGLE_PROJECT_ID
-  - echo $GOOGLE_SERVICE_ACCOUNT > gcloud-service-key.json
-  - gcloud auth activate-service-account --key-file gcloud-service-key.json
 
 stages:
   - build
@@ -38,7 +30,15 @@ deploy:
     only:
         - main
     script:
-        - ./gradlew appengineDeploy
+      - wget -O gcloud-sdk.tar.gz $GOOGLE_CLI_URL
+      - tar -xzf gcloud-sdk.tar.gz
+      - ./google-cloud-sdk/install.sh
+      - export PATH=$PATH:$PWD/google-cloud-sdk/bin
+      - gcloud components install app-engine-java
+      - gcloud config set project $GOOGLE_PROJECT_ID
+      - echo $GOOGLE_SERVICE_ACCOUNT > gcloud-service-key.json
+      - gcloud auth activate-service-account --key-file gcloud-service-key.json
+      - ./gradlew appengineDeploy
 
 after_script:
   - rm -rf gcloud-sdk.tar.gz google-cloud-sdk gcloud-service-key.json
