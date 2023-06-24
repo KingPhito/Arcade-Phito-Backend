@@ -1,7 +1,9 @@
 package com.ralphdugue.backend.arcadephito
 
 import com.ralphdugue.backend.arcadephito.di.appModule
-import com.ralphdugue.backend.arcadephito.modules.*
+import com.ralphdugue.backend.arcadephito.plugins.*
+import com.ralphdugue.backend.arcadephito.routes.configureAuthRoutes
+import com.ralphdugue.backend.arcadephito.routes.configureUserRoutes
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import org.koin.ktor.plugin.Koin
@@ -16,8 +18,8 @@ fun Application.module() {
         modules(appModule)
     }
     configureSerialization()
-    configureSecurity()
-    configureDatabases()
+    configureAuthRoutes()
+    configureUserRoutes()
     configureHTTP()
 }
 

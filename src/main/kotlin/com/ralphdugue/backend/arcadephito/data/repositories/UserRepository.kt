@@ -1,14 +1,18 @@
 package com.ralphdugue.backend.arcadephito.data.repositories
 
-import com.ralphdugue.backend.arcadephito.data.models.User
+import com.ralphdugue.backend.arcadephito.data.models.UserTableRow
+import com.ralphdugue.backend.arcadephito.domain.LoginFields
+import com.ralphdugue.backend.arcadephito.domain.UserResponse
 
 interface UserRepository {
 
-    suspend fun create(user: User): Int
+    suspend fun createNewUser(user: UserTableRow): UserResponse
 
-    suspend fun read(username: String): User?
+    suspend fun getUserFromLoginFields(fields: LoginFields): UserResponse?
 
-    suspend fun update(username: String, user: User)
+    suspend fun getUserByUsername(username: String): UserResponse?
 
-    suspend fun delete(username: String)
+    suspend fun updateUser(username: String, user: UserTableRow)
+
+    suspend fun deleteUser(username: String)
 }
