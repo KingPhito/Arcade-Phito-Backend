@@ -17,7 +17,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.google.cloud.tools.appengine") version "2.4.2"
-    id("com.expediagroup.graphql") version "6.5.3"
+    //id("com.expediagroup.graphql") version "6.5.3"
 }
 
 group = "com.ralphdugue.arcadephito"
@@ -81,8 +81,8 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockk_version")
 }
 
-graphql {
-    schema {
-        packages = listOf("om.ralphdugue.arcadephito.backend")
-    }
-}
+//graphql {
+//    schema {
+//        packages = listOf("om.ralphdugue.arcadephito.backend")
+//    }
+//}
