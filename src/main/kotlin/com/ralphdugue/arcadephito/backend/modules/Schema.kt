@@ -1,7 +1,9 @@
 package com.ralphdugue.arcadephito.backend.modules
 
 import com.expediagroup.graphql.server.ktor.GraphQL
+import com.expediagroup.graphql.server.ktor.graphQLGetRoute
 import com.expediagroup.graphql.server.ktor.graphQLPostRoute
+import com.expediagroup.graphql.server.ktor.graphiQLRoute
 import com.ralphdugue.arcadephito.backend.adapters.graphql.ArcadePhitoSchema
 import com.ralphdugue.arcadephito.backend.adapters.graphql.mutations.CreateUserMutation
 import com.ralphdugue.arcadephito.backend.adapters.graphql.queries.LoginUserQuery
@@ -15,7 +17,7 @@ fun Application.configureSchema() {
 
     install(GraphQL) {
         schema {
-            packages = listOf("com.ralphdugue.arcadephito.backend.adapters.graphql")
+            packages = listOf("com.ralphdugue.arcadephito.backend")
             queries = listOf(loginUserQuery)
             mutations = listOf(createUserMutation)
             schemaObject = ArcadePhitoSchema()
@@ -23,5 +25,7 @@ fun Application.configureSchema() {
     }
     routing {
         graphQLPostRoute()
+        graphQLGetRoute()
+        graphiQLRoute()
     }
 }

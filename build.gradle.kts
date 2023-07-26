@@ -72,17 +72,9 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-//    implementation("com.apurebase:kgraphql:$kgraphql_version")
-//    implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
     implementation("com.expediagroup", "graphql-kotlin-ktor-server", graphql_kotlin_version)
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("io.mockk:mockk:$mockk_version")
 }
-
-//graphql {
-//    schema {
-//        packages = listOf("om.ralphdugue.arcadephito.backend")
-//    }
-//}

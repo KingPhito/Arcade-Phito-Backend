@@ -4,12 +4,10 @@ import com.ralphdugue.arcadephito.backend.di.databaseModule
 import com.ralphdugue.arcadephito.backend.di.repositoryModule
 import com.ralphdugue.arcadephito.backend.di.schemaModule
 import com.ralphdugue.arcadephito.backend.di.useCaseModule
-import com.ralphdugue.arcadephito.backend.modules.*
-import io.ktor.serialization.kotlinx.json.*
+import com.ralphdugue.arcadephito.backend.modules.configureSchema
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
@@ -22,14 +20,10 @@ fun Application.module() {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
     }
-    install(ContentNegotiation) {
-        json()
-    }
     install(Koin) {
         slf4jLogger()
         modules(databaseModule, repositoryModule, useCaseModule, schemaModule)
     }
     //configureSecurity()
     configureSchema()
-    configureHTTP()
 }
