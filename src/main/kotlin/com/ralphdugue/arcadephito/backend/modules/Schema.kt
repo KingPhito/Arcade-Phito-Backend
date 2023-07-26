@@ -1,61 +1,27 @@
 package com.ralphdugue.arcadephito.backend.modules
 
-import com.apurebase.kgraphql.GraphQL
-import com.ralphdugue.arcadephito.backend.domain.entities.LoginFields
-import com.ralphdugue.arcadephito.backend.domain.entities.RegistrationFields
-import com.ralphdugue.arcadephito.backend.domain.entities.User
-import com.ralphdugue.arcadephito.backend.domain.repositories.UserRepository
-import com.ralphdugue.arcadephito.backend.domain.usecase.LoginUser
-import com.ralphdugue.arcadephito.backend.domain.usecase.RegisterUser
+import com.expediagroup.graphql.server.ktor.GraphQL
+import com.expediagroup.graphql.server.ktor.graphQLPostRoute
+import com.ralphdugue.arcadephito.backend.adapters.graphql.ArcadePhitoSchema
+import com.ralphdugue.arcadephito.backend.adapters.graphql.mutations.CreateUserMutation
+import com.ralphdugue.arcadephito.backend.adapters.graphql.queries.LoginUserQuery
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureSchema() {
-    val userRepository: UserRepository by inject()
+    val createUserMutation: CreateUserMutation by inject()
+    val loginUserQuery: LoginUserQuery by inject()
+
     install(GraphQL) {
-        playground = true
-
-//        wrap {
-//            authenticate(optional = true, build = it)
-//        }
-//
-//        context { call ->
-//            call.authentication.principal<User>()?.let {
-//                +it
-//            }
-//        }
-
         schema {
-            configure {
-                useDefaultPrettyPrinter = true
-            }
-
-            mutation("RegisterUser") {
-                resolver { username: String, email: String, password: String ->
-                    try {
-                        val fields = RegistrationFields(username, email, password)
-                        RegisterUser(userRepository).execute(fields)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        null
-                    }
-                }
-            }
-
-            query("LoginUser") {
-                resolver { username: String, password: String ->
-                    try {
-                        val fields = LoginFields(username, password)
-                        LoginUser(userRepository).execute(fields)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        null
-                    }
-                }
-            }
-
-            type<User>()
+            packages = listOf("com.ralphdugue.arcadephito.backend.adapters.graphql")
+            queries = listOf(loginUserQuery)
+            mutations = listOf(createUserMutation)
+            schemaObject = ArcadePhitoSchema()
         }
+    }
+    routing {
+        graphQLPostRoute()
     }
 }

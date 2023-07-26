@@ -1,4 +1,4 @@
-package com.ralphdugue.arcadephito.backend.data.database
+package com.ralphdugue.arcadephito.backend.adapters.database
 
 import org.jetbrains.exposed.sql.Table
 

@@ -1,5 +1,6 @@
-package com.ralphdugue.arcadephito.backend.data.database
+package com.ralphdugue.arcadephito.backend.di
 
+import com.ralphdugue.arcadephito.backend.adapters.database.UsersTable
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -21,6 +22,5 @@ object DatabaseFactory {
         return database
     }
 
-    suspend fun <T> dbQuery(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO) { block() }
+    suspend fun <T> dbQuery(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO) { block() }
 }

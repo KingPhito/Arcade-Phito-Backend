@@ -1,7 +1,6 @@
 package com.ralphdugue.arcadephito.backend.domain.repositories
 
-import com.ralphdugue.arcadephito.backend.data.database.UserTableRow
-import com.ralphdugue.arcadephito.backend.domain.entities.User
+import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
 
 interface UserRepository {
 

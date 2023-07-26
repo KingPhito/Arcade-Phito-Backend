@@ -1,8 +1,8 @@
 package com.ralphdugue.arcadephito.backend.domain.repositories
 
-import com.ralphdugue.arcadephito.backend.data.database.DatabaseFactory
-import com.ralphdugue.arcadephito.backend.data.database.UserTableRow
-import com.ralphdugue.arcadephito.backend.data.repositories.UserRepositoryImpl
+import com.ralphdugue.arcadephito.backend.di.DatabaseFactory
+import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
+import com.ralphdugue.arcadephito.backend.adapters.repositories.UserRepositoryImpl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain

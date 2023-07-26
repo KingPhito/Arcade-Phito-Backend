@@ -1,8 +1,8 @@
-package com.ralphdugue.arcadephito.backend.data.repositories
+package com.ralphdugue.arcadephito.backend.adapters.repositories
 
-import com.ralphdugue.arcadephito.backend.data.database.DatabaseFactory.dbQuery
-import com.ralphdugue.arcadephito.backend.data.database.UserTableRow
-import com.ralphdugue.arcadephito.backend.data.database.UsersTable
+import com.ralphdugue.arcadephito.backend.di.DatabaseFactory.dbQuery
+import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
+import com.ralphdugue.arcadephito.backend.adapters.database.UsersTable
 import com.ralphdugue.arcadephito.backend.domain.repositories.UserRepository
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select

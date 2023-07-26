@@ -1,7 +1,9 @@
 package com.ralphdugue.arcadephito.backend
 
 import com.ralphdugue.arcadephito.backend.di.databaseModule
-import com.ralphdugue.arcadephito.backend.di.userModule
+import com.ralphdugue.arcadephito.backend.di.repositoryModule
+import com.ralphdugue.arcadephito.backend.di.schemaModule
+import com.ralphdugue.arcadephito.backend.di.useCaseModule
 import com.ralphdugue.arcadephito.backend.modules.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -25,7 +27,7 @@ fun Application.module() {
     }
     install(Koin) {
         slf4jLogger()
-        modules(databaseModule, userModule)
+        modules(databaseModule, repositoryModule, useCaseModule, schemaModule)
     }
     //configureSecurity()
     configureSchema()

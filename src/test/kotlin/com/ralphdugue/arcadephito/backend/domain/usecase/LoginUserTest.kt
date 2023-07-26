@@ -1,6 +1,6 @@
 package com.ralphdugue.arcadephito.backend.domain.usecase
 
-import com.ralphdugue.arcadephito.backend.data.database.UserTableRow
+import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
 import com.ralphdugue.arcadephito.backend.domain.entities.LoginFields
 import com.ralphdugue.arcadephito.backend.domain.repositories.UserRepository
 import io.mockk.coEvery

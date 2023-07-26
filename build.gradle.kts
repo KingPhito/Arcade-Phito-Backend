@@ -8,7 +8,7 @@ val h2_version : String by project
 val koin_version : String by project
 val mockk_version : String by project
 val kgraphql_version : String by project
-//val graphql_kotlin_version : String by project
+val graphql_kotlin_version : String by project
 val pgjdbc_version : String by project
 
 plugins {
@@ -17,11 +17,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.google.cloud.tools.appengine") version "2.4.2"
-    //id("com.expediagroup.graphql") version "7.0.0-alpha.6"
+    id("com.expediagroup.graphql") version "6.5.3"
 }
 
 group = "com.ralphdugue.arcadephito"
 version = "0.0.1"
+java.sourceCompatibility = JavaVersion.VERSION_17
 application {
     mainClass.set("com.ralphdugue.arcadephito.ApplicationKt")
 
@@ -43,7 +44,7 @@ appengine {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -71,11 +72,17 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.apurebase:kgraphql:$kgraphql_version")
-    implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
-    //implementation("com.expediagroup", "graphql-kotlin-ktor-server", graphql_kotlin_version)
+//    implementation("com.apurebase:kgraphql:$kgraphql_version")
+//    implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
+    implementation("com.expediagroup", "graphql-kotlin-ktor-server", graphql_kotlin_version)
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("io.mockk:mockk:$mockk_version")
+}
+
+graphql {
+    schema {
+        packages = listOf("om.ralphdugue.arcadephito.backend")
+    }
 }
