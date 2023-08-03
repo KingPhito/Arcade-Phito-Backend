@@ -10,7 +10,7 @@ interface EntityParamUseCase<P : Entity, R> {
     suspend fun execute(param: P): R
 }
 
-interface EntityReturnUseCase<R : Entity> {
+interface EntityReturnUseCase<P, R : Entity> {
 
-    suspend fun execute(): R
+    suspend fun execute(param: P): R
 }
