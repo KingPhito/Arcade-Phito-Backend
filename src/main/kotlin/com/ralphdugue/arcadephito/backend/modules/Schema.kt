@@ -8,6 +8,7 @@ import com.ralphdugue.arcadephito.backend.adapters.graphql.ArcadePhitoSchema
 import com.ralphdugue.arcadephito.backend.adapters.graphql.mutations.CreateUserMutation
 import com.ralphdugue.arcadephito.backend.adapters.graphql.queries.LoginUserQuery
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
@@ -24,8 +25,10 @@ fun Application.configureSchema() {
         }
     }
     routing {
-        graphQLPostRoute()
-        graphQLGetRoute()
+        authenticate("auth-jwt") {
+            graphQLGetRoute()
+            graphQLPostRoute()
+        }
         graphiQLRoute()
     }
 }

@@ -1,8 +1,8 @@
-package com.ralphdugue.arcadephito.backend.domain.repositories
+package com.ralphdugue.arcadephito.backend.domain.appusers.repositories
 
 import com.ralphdugue.arcadephito.backend.di.DatabaseFactory
-import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
-import com.ralphdugue.arcadephito.backend.adapters.repositories.UserRepositoryImpl
+import com.ralphdugue.arcadephito.backend.adapters.database.AppUserTableRow
+import com.ralphdugue.arcadephito.backend.adapters.repositories.AppUserRepositoryImpl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -14,9 +14,9 @@ import org.junit.Test
 import org.mindrot.jbcrypt.BCrypt
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class UserRepositoryTest {
+class AppAppUserRepositoryTest {
 
-    private lateinit var userRepository: UserRepository
+    private lateinit var appUserRepository: AppUserRepository
 
     private lateinit var database: Database
 
@@ -27,7 +27,7 @@ class UserRepositoryTest {
     fun setUp() {
         Dispatchers.setMain(mainThreadSurrogate)
         database = DatabaseFactory.create()
-        userRepository = UserRepositoryImpl()
+        appUserRepository = AppUserRepositoryImpl()
     }
 
     @After
@@ -38,8 +38,8 @@ class UserRepositoryTest {
 
     @Test
     fun `addUser should return the correct user information when user created successfully`() = runBlocking {
-        val user = userRepository.addUser("phito", "phito@gmail.com", "password")
-        val expectedUser = UserTableRow(
+        val user = appUserRepository.addUser("phito", "phito@gmail.com", "password")
+        val expectedUser = AppUserTableRow(
             username = "phito",
             email = "phito@gmail.com",
             passwordHash = "password"
@@ -51,19 +51,19 @@ class UserRepositoryTest {
 
     @Test
     fun `addUser should throw an exception when user already exists`(): Unit = runBlocking {
-        userRepository.addUser("adrienne", "ahood@gmail.com", "password")
+        appUserRepository.addUser("adrienne", "ahood@gmail.com", "password")
         assertThrows(Exception::class.java){
             runBlocking {
-                userRepository.addUser("adrienne", "ahood@gmail.com", "password")
+                appUserRepository.addUser("adrienne", "ahood@gmail.com", "password")
             }
         }
     }
 
     @Test
     fun `getUserByUsername should return the correct user information when user exists`() = runBlocking {
-        userRepository.addUser("ralphdugue", "rdugue1@gmail.com", "password")
-        val user = userRepository.getUserByUsername("ralphdugue")
-        val expectedUser = UserTableRow(
+        appUserRepository.addUser("ralphdugue", "rdugue1@gmail.com", "password")
+        val user = appUserRepository.getUserByUsername("ralphdugue")
+        val expectedUser = AppUserTableRow(
             username = "ralphdugue",
             email = "rdugue1@gmail.com",
             passwordHash = "password"
@@ -75,7 +75,7 @@ class UserRepositoryTest {
 
     @Test
     fun `getUserByUsername should return null when user does not exist`() = runBlocking {
-        val user = userRepository.getUserByUsername("Sky")
+        val user = appUserRepository.getUserByUsername("Sky")
         assert(user == null)
     }
 }

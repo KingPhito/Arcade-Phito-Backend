@@ -1,6 +1,7 @@
 package com.ralphdugue.arcadephito.backend.di
 
-import com.ralphdugue.arcadephito.backend.adapters.database.UsersTable
+import com.ralphdugue.arcadephito.backend.adapters.database.APIUserTable
+import com.ralphdugue.arcadephito.backend.adapters.database.AppUsersTable
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -17,7 +18,10 @@ object DatabaseFactory {
             password = ""
         )
         transaction(database) {
-            SchemaUtils.create(UsersTable)
+            SchemaUtils.create(
+                AppUsersTable,
+                APIUserTable
+            )
         }
         return database
     }

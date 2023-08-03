@@ -5,6 +5,7 @@ import com.ralphdugue.arcadephito.backend.di.repositoryModule
 import com.ralphdugue.arcadephito.backend.di.schemaModule
 import com.ralphdugue.arcadephito.backend.di.useCaseModule
 import com.ralphdugue.arcadephito.backend.modules.configureSchema
+import com.ralphdugue.arcadephito.backend.modules.configureSecurity
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
@@ -24,6 +25,6 @@ fun Application.module() {
         slf4jLogger()
         modules(databaseModule, repositoryModule, useCaseModule, schemaModule)
     }
-    //configureSecurity()
+    configureSecurity()
     configureSchema()
 }

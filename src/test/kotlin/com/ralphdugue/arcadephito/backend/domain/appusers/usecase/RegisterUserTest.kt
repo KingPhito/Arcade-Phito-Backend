@@ -1,8 +1,8 @@
-package com.ralphdugue.arcadephito.backend.domain.usecase
+package com.ralphdugue.arcadephito.backend.domain.appusers.usecase
 
-import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
-import com.ralphdugue.arcadephito.backend.domain.entities.RegistrationFields
-import com.ralphdugue.arcadephito.backend.domain.repositories.UserRepository
+import com.ralphdugue.arcadephito.backend.adapters.database.AppUserTableRow
+import com.ralphdugue.arcadephito.backend.domain.appusers.entities.RegistrationFields
+import com.ralphdugue.arcadephito.backend.domain.appusers.repositories.AppUserRepository
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
@@ -23,7 +23,7 @@ class RegisterUserTest {
     val mockkRule = MockKRule(this)
 
     @RelaxedMockK
-    private lateinit var userRepository: UserRepository
+    private lateinit var appUserRepository: AppUserRepository
 
     private lateinit var registerUser: RegisterUser
 
@@ -33,13 +33,13 @@ class RegisterUserTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainThreadSurrogate)
-        registerUser = RegisterUser(userRepository)
+        registerUser = RegisterUser(appUserRepository)
     }
 
     @Test
     fun `RegisterUser should return the correct user information when user created successfully`() = runBlocking {
         val fields = RegistrationFields("r", "phito", "p")
-        coEvery { userRepository.addUser(any(), any(), any()) } returns UserTableRow(
+        coEvery { appUserRepository.addUser(any(), any(), any()) } returns AppUserTableRow(
             username = fields.username,
             email = fields.email,
             passwordHash = fields.password

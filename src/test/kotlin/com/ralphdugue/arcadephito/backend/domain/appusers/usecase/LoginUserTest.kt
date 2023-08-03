@@ -1,8 +1,8 @@
-package com.ralphdugue.arcadephito.backend.domain.usecase
+package com.ralphdugue.arcadephito.backend.domain.appusers.usecase
 
-import com.ralphdugue.arcadephito.backend.adapters.database.UserTableRow
-import com.ralphdugue.arcadephito.backend.domain.entities.LoginFields
-import com.ralphdugue.arcadephito.backend.domain.repositories.UserRepository
+import com.ralphdugue.arcadephito.backend.adapters.database.AppUserTableRow
+import com.ralphdugue.arcadephito.backend.domain.appusers.entities.LoginFields
+import com.ralphdugue.arcadephito.backend.domain.appusers.repositories.AppUserRepository
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
@@ -25,7 +25,7 @@ class LoginUserTest {
     val mockKRule = MockKRule(this)
 
     @RelaxedMockK
-    private lateinit var userRepository: UserRepository
+    private lateinit var appUserRepository: AppUserRepository
 
     private lateinit var loginUser: LoginUser
 
@@ -35,13 +35,13 @@ class LoginUserTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainThreadSurrogate)
-        loginUser = LoginUser(userRepository)
+        loginUser = LoginUser(appUserRepository)
     }
 
     @Test
     fun `LoginUser should return the correct user information when user created successfully`() = runBlocking {
         val fields = LoginFields("phito", "password")
-        coEvery { userRepository.getUserByUsername(any()) } returns UserTableRow(
+        coEvery { appUserRepository.getUserByUsername(any()) } returns AppUserTableRow(
             username = fields.username,
             email = "fake@mail.com",
             passwordHash = BCrypt.hashpw(fields.password, BCrypt.gensalt())
@@ -54,7 +54,7 @@ class LoginUserTest {
     @Test
     fun `LoginUser should throw an exception when user not found`(): Unit = runBlocking {
         val fields = LoginFields("phito", "password")
-        coEvery { userRepository.getUserByUsername(any()) } returns null
+        coEvery { appUserRepository.getUserByUsername(any()) } returns null
         assertThrows(Exception::class.java) {
             runBlocking {
                 loginUser.execute(fields)
@@ -65,7 +65,7 @@ class LoginUserTest {
     @Test
     fun `LoginUser should throw an exception when password is incorrect`(): Unit = runBlocking {
         val fields = LoginFields("phito", "password")
-        coEvery { userRepository.getUserByUsername(any()) } returns UserTableRow(
+        coEvery { appUserRepository.getUserByUsername(any()) } returns AppUserTableRow(
             username = fields.username,
             email = "fake@gmail.com",
             passwordHash = BCrypt.hashpw("wrongpassword", BCrypt.gensalt())
