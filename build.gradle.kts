@@ -1,33 +1,26 @@
 import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
+import com.google.protobuf.gradle.*
 
-val ktor_version: String by project
 val kotlin_version: String by project
-val logback_version: String by project
-val exposed_version : String by project
-val h2_version : String by project
 val koin_version : String by project
 val mockk_version : String by project
-val kgraphql_version : String by project
-//val graphql_kotlin_version : String by project
-val pgjdbc_version : String by project
+val sqldelight_version : String by project
+val grpc_version : String by project
+val grpc_kotlin_version : String by project
+val protobuf_version : String by project
+val h2_version : String by project
 
 plugins {
     kotlin("jvm") version "1.9.0"
-    id("io.ktor.plugin") version "2.3.2"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("plugin.serialization") version "1.9.0"
+    id("com.google.protobuf") version "0.9.4"
+    id("app.cash.sqldelight") version "2.0.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.google.cloud.tools.appengine") version "2.4.2"
-    //id("com.expediagroup.graphql") version "7.0.0-alpha.6"
 }
 
-group = "com.ralphdugue.arcadephito"
-version = "0.0.1"
-application {
-    mainClass.set("com.ralphdugue.arcadephito.ApplicationKt")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
-}
+group = "com.ralphdugue.arcadephito-grpc"
+version = "1.0-SNAPSHOT"
 
 appengine {
     configure<AppEngineAppYamlExtension> {
@@ -41,41 +34,67 @@ appengine {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-}
-
 repositories {
+    google()
     mavenCentral()
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("io.grpc:grpc-kotlin-stub:$grpc_kotlin_version")
+    implementation("io.grpc:grpc-protobuf:$grpc_version")
+    implementation("io.grpc:grpc-netty:$grpc_version")
+    implementation("com.google.protobuf:protobuf-kotlin:$protobuf_version")
     implementation("com.h2database:h2:$h2_version")
-    implementation("com.impossibl.pgjdbc-ng:pgjdbc-ng:$pgjdbc_version")
+    implementation("org.postgresql:postgresql:42.2.27")
+    implementation("app.cash.sqldelight:jdbc-driver:2.0.0")
+    implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
+    implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("org.mindrot:jbcrypt:0.4")
-    implementation("io.ktor:ktor-server-swagger-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-openapi:$ktor_version")
-    implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
-    implementation("io.ktor:ktor-client-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-client-apache-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.apurebase:kgraphql:$kgraphql_version")
-    implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
-    //implementation("com.expediagroup", "graphql-kotlin-ktor-server", graphql_kotlin_version)
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    implementation("com.auth0:java-jwt:4.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("io.mockk:mockk:$mockk_version")
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$protobuf_version"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpc_version"
+        }
+        id("grpckt") {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpc_kotlin_version}:jdk8@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("grpc")
+                id("grpckt")
+            }
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("ArcadePhito") {
+            packageName = "com.ralphdugue.arcadephitogrpc"
+            dialect("app.cash.sqldelight:postgresql-dialect:2.0.0")
+        }
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(8)
 }

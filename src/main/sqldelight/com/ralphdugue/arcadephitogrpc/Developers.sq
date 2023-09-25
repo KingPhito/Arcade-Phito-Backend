@@ -1,0 +1,16 @@
+CREATE TABLE api_credentials (
+  id SERIAL NOT NULL,
+  developer_id VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  api_key_hash VARCHAR(255) NOT NULL,
+  api_secret_hash VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+createApiUser:
+INSERT INTO api_credentials (developer_id, email, api_key_hash, api_secret_hash)
+VALUES (?, ?, ?, ?)
+RETURNING developer_id;
+
+getApiUser:
+SELECT * FROM api_credentials WHERE developer_id = ?;

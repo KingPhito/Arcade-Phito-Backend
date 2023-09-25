@@ -1,0 +1,32 @@
+syntax = "proto3";
+package  developer;
+import "google/rpc/status.proto";
+
+service DeveloperService {
+    rpc CreateDeveloper(CreateDeveloperRequest) returns (CreateDeveloperResponse) {}
+    rpc AuthenticateDeveloper(AuthRequest) returns (AuthResponse) {}
+}
+
+// CreateDeveloperRequest is the request message for CreateDeveloper.
+message CreateDeveloperRequest {
+    string developerId = 1;
+    string email = 2;
+}
+
+message CreateDeveloperResponse {
+    string apiKey = 1;
+    string apiSecret = 2;
+    string developerId = 3;
+    google.rpc.Status result = 4;
+}
+
+message AuthRequest {
+    string apiKey = 1;
+    string apiSecret = 2;
+    string developerId = 3;
+}
+
+message AuthResponse {
+    google.rpc.Status result = 1;
+    string token = 2;
+}

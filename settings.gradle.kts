@@ -1,8 +1,8 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
+        google()
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
+        gradlePluginPortal()
     }
     resolutionStrategy {
         eachPlugin {
@@ -12,4 +12,9 @@ pluginManagement {
         }
     }
 }
-rootProject.name = "com.ralphdugue.arcadephito.backend"
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+}
+
+rootProject.name = "arcade-phito-grpc"

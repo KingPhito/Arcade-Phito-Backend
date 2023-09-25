@@ -1,0 +1,23 @@
+CREATE TABLE user (
+  id SERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  date_of_birth DATE NOT NULL,
+  password_hash VARCHAR(64) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+insertUser:
+INSERT INTO user (name, email, date_of_birth, password_hash)
+VALUES (?, ?, ?, ?)
+RETURNING name;
+
+selectUser:
+SELECT * FROM user WHERE name = ?;
+
+updateUser:
+UPDATE user SET name = ?, email = ?, date_of_birth = ?, password_hash = ? WHERE name = ?;
+
+deleteUser:
+DELETE FROM user WHERE id = ?;
+
