@@ -1,0 +1,39 @@
+syntax = "proto3";
+package user;
+import "google/type/date.proto";
+import "google/rpc/status.proto";
+
+service AppUserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse) {}
+}
+
+message ArcadePhitoUser {
+  string name = 1;
+  string email = 2;
+  google.type.Date birthdate = 4;
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  google.type.Date birthdate = 4;
+  string token = 5;
+}
+
+message CreateUserResponse {
+  ArcadePhitoUser user = 1;
+  google.rpc.Status status = 2;
+}
+
+message AuthenticateUserRequest {
+  string name = 1;
+  string password = 2;
+  string token = 3;
+}
+
+message AuthenticateUserResponse {
+  ArcadePhitoUser user = 1;
+  google.rpc.Status status = 2;
+}

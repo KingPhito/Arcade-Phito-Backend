@@ -1,1 +1,1 @@
-# Arcade Phito Backend
+# Arcade Phito gRPC Server

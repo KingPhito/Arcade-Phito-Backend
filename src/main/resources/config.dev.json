@@ -1,0 +1,15 @@
+{
+  "port": 8080,
+  "db": {
+    "host": "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL",
+    "username": "root",
+    "password": "",
+    "driver": "org.h2.Driver"
+  },
+  "jwt": {
+    "secret": "secret",
+    "issuer": "issuer",
+    "audience": "audience",
+    "expiration": 86400
+  }
+}
