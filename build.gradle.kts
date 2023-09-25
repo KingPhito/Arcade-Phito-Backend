@@ -1,5 +1,6 @@
 import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 import com.google.protobuf.gradle.*
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 val kotlin_version: String by project
 val koin_version : String by project
