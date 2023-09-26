@@ -6,8 +6,7 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
-  - apk update && apk add protoc && apk add protoc-gen-grpc-java
-  - export PATH="/usr/lib/protoc-gen-grpc-java:$PATH"
+  - apk update && apk add protoc
 
 stages:
   - build
