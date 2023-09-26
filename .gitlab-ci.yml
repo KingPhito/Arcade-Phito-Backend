@@ -18,7 +18,7 @@ build:
     - develop
     - main
   script:
-    - ./gradlew :compiler:build
+    - ./gradlew generateProto
     - ./gradlew shadowJar
 
 test:
