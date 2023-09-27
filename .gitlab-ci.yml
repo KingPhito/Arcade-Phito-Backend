@@ -4,6 +4,7 @@ variables:
   GOOGLE_CLI_URL: https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz
 
 before_script:
+  - export PATH="/usr/local/bin:$PATH"
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
   - apk update && apk add protoc
