@@ -2,13 +2,16 @@ image: gradle:8.1.1-jdk17-alpine
 
 variables:
   GOOGLE_CLI_URL: https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz
+  GRPC_JAVA_PROTOC_GEN_URL: https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.57.2/protoc-gen-grpc-java-1.57.2-linux-x86_64.exe
 
 before_script:
   - export PATH="/usr/local/bin:$PATH"
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
   - apk update && apk add protoc
-  - protoc --version
+  - cd /usr/local/bin
+  - wget $GRPC_JAVA_PROTOC_GEN_URL -O protoc-gen-grpc-java.exe
+  - chmod +x protoc-gen-grpc-java.exe
 
 stages:
   - build
