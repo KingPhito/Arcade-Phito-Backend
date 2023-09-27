@@ -69,7 +69,7 @@ protobuf {
     plugins {
         id("grpc") {
             //artifact = "io.grpc:protoc-gen-grpc-java:$grpc_version"
-            path = "/usr/local/bin/protoc-gen-grpc-java.exe"
+            path = "tmp/protoc-gen-grpc-java.exe"
         }
         id("grpckt") {
             artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpc_kotlin_version}:jdk8@jar"

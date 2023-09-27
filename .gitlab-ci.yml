@@ -8,9 +8,10 @@ before_script:
   - export PATH="/usr/local/bin:$PATH"
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
-  - wget $GRPC_JAVA_PROTOC_GEN_URL -O /usr/local/bin/protoc-gen-grpc-java.exe
-  - chmod +x /usr/local/bin/protoc-gen-grpc-java.exe
-  - ls -l /usr/local/bin
+  - mkdir -p ./tmp
+  - wget $GRPC_JAVA_PROTOC_GEN_URL -O ./tmp/protoc-gen-grpc-java.exe
+  - chmod +x ./tmp/protoc-gen-grpc-java.exe
+  - ls -l ./tmp
 
 stages:
   - build
