@@ -77,11 +77,11 @@ protobuf {
     generateProtoTasks {
         all().forEach {
             it.plugins {
-                id("grpc")
-                id("grpckt")
+                create("grpc")
+                create("grpckt")
             }
             it.builtins {
-                id("kotlin")
+                create("kotlin")
             }
         }
     }
