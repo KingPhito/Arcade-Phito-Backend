@@ -8,7 +8,6 @@ before_script:
   - export PATH="/usr/local/bin:$PATH"
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
-  - apk update && apk add protoc
   - cd /usr/local/bin
   - wget $GRPC_JAVA_PROTOC_GEN_URL -O protoc-gen-grpc-java.exe
   - chmod +x protoc-gen-grpc-java.exe
