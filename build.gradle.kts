@@ -97,11 +97,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.generateProto {
-    enabled = false
-    plugins {  }
-}
-
 kotlin {
     jvmToolchain(17)
 }
