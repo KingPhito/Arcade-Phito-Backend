@@ -48,9 +48,10 @@ dependencies {
     implementation("io.grpc:grpc-kotlin-stub:$grpc_kotlin_version")
     implementation("io.grpc:grpc-protobuf:$grpc_version")
     implementation("io.grpc:grpc-netty:$grpc_version")
+    implementation("com.google.protobuf:protobuf-java:$protobuf_version")
     implementation("com.google.protobuf:protobuf-kotlin:$protobuf_version")
     implementation("com.h2database:h2:$h2_version")
-    implementation("org.postgresql:postgresql:42.2.27")
+    implementation("org.postgresql:postgresql:42.5.4")
     implementation("app.cash.sqldelight:jdbc-driver:2.0.0")
     implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
     implementation("com.zaxxer:HikariCP:5.0.1")
@@ -94,6 +95,11 @@ sqldelight {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.generateProto {
+    enabled = false
+    plugins {  }
 }
 
 kotlin {
