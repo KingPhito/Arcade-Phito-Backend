@@ -29,8 +29,10 @@ appengine {
             setArtifact("build/libs/${project.name}-all.jar")
         }
         deploy {
+            stopPreviousVersion = true
             version = "GCLOUD_CONFIG"
             projectId = "GCLOUD_CONFIG"
+            promote = true
         }
     }
 }
@@ -41,21 +43,22 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("io.insert-koin:koin-bom:$koin_version"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
-    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+    implementation("io.insert-koin:koin-core")
+    implementation("io.insert-koin:koin-logger-slf4j")
     implementation("io.grpc:grpc-kotlin-stub:$grpc_kotlin_version")
     implementation("io.grpc:grpc-protobuf:$grpc_version")
     implementation("io.grpc:grpc-netty:$grpc_version")
+    implementation("com.google.protobuf:protobuf-java:$protobuf_version")
     implementation("com.google.protobuf:protobuf-kotlin:$protobuf_version")
-    implementation("com.h2database:h2:$h2_version")
-    implementation("org.postgresql:postgresql:42.2.27")
+    implementation("org.postgresql:postgresql:42.5.4")
     implementation("app.cash.sqldelight:jdbc-driver:2.0.0")
     implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("org.mindrot:jbcrypt:0.4")
     implementation("com.auth0:java-jwt:4.4.0")
+    implementation("org.springframework.security:spring-security-core:6.0.3")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("io.mockk:mockk:$mockk_version")
@@ -68,6 +71,7 @@ protobuf {
     plugins {
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpc_version"
+            //path = "/usr/local/bin/protoc-gen-grpc-java.exe"
         }
         id("grpckt") {
             artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpc_kotlin_version}:jdk8@jar"
@@ -79,15 +83,20 @@ protobuf {
                 id("grpc")
                 id("grpckt")
             }
+            it.builtins {
+                id("kotlin")
+            }
         }
     }
 }
 
 sqldelight {
     databases {
-        create("ArcadePhito") {
-            packageName = "com.ralphdugue.arcadephitogrpc"
+        create("ArcadePhitoDB") {
+            packageName.set("com.ralphdugue.arcadephitogrpc")
             dialect("app.cash.sqldelight:postgresql-dialect:2.0.0")
+//            srcDirs("sqldelight")
+//            deriveSchemaFromMigrations.set(true)
         }
     }
 }

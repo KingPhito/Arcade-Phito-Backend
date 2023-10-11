@@ -3,34 +3,49 @@ package com.ralphdugue.arcadephitogrpc.services
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.CreateDeveloperParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.GenerateDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.ValidateDeveloperParams
+import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.CreateDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.GenerateDeveloperToken
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.ValidateDeveloper
+import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
 import developer.Developer
 import developer.DeveloperServiceGrpcKt
-import kotlin.random.Random
 
 class DeveloperService(
     private val createDeveloper: CreateDeveloper,
     private val validateDeveloper: ValidateDeveloper,
-    private val generateDeveloperToken: GenerateDeveloperToken
+    private val generateDeveloperToken: GenerateDeveloperToken,
+    private val verifyDeveloperToken: VerifyDeveloperToken
 ) :
 
     DeveloperServiceGrpcKt.DeveloperServiceCoroutineImplBase() {
 
     override suspend fun createDeveloper(request: Developer.CreateDeveloperRequest): Developer.CreateDeveloperResponse {
-        val apiKey = request.developerId + generateRandomString()
-        val apiSecret = generateRandomString()
+        val validToken = verifyDeveloperToken.execute(VerifyDeveloperTokenParams(token = request.token))
+        if (!validToken) {
+            val builder = Developer.CreateDeveloperResponse.newBuilder()
+                .setApiKey("")
+                .setApiSecret("")
+                .setDeveloperId("")
+
+            return builder
+                .setResult(
+                    builder.resultBuilder
+                        .setCode(401)
+                        .setMessage("Unauthorized")
+                        .build()
+                )
+                .build()
+        }
         val params = CreateDeveloperParams(
             devId = request.developerId,
             email = request.email,
-            apiKey = apiKey,
-            apiSecret = apiSecret
         )
-        return if (createDeveloper.execute(params)) {
+        val (success, response) = createDeveloper.execute(params)
+        return if (success) {
             val builder = Developer.CreateDeveloperResponse.newBuilder()
-                .setApiKey(apiKey)
-                .setApiSecret(apiSecret)
+                .setApiKey(response?.apiKey ?: "")
+                .setApiSecret(response?.apiSecret ?: "")
                 .setDeveloperId(request.developerId)
 
             builder
@@ -66,7 +81,15 @@ class DeveloperService(
         )
         return if (validateDeveloper.execute(params)) {
             val builder = Developer.AuthResponse.newBuilder()
-                .setToken(generateDeveloperToken.execute(GenerateDeveloperTokenParams(request.developerId)))
+                .setToken(
+                    generateDeveloperToken.execute(
+                        GenerateDeveloperTokenParams(
+                            devId = request.developerId,
+                            apiKey = request.apiKey,
+                            apiSecret = request.apiSecret
+                        )
+                    )
+                )
 
             builder
                 .setResult(
@@ -89,13 +112,5 @@ class DeveloperService(
                 )
                 .build()
         }
-    }
-
-    private fun generateRandomString(): String {
-        val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-        return (1..32)
-            .map { Random.nextInt(0, charPool.size) }
-            .map(charPool::get)
-            .joinToString("")
     }
 }

@@ -11,5 +11,7 @@ class GenerateDeveloperToken(private val config: ArcadePhitoConfig) : Coroutines
         .withAudience(config.jwt.audience)
         .withIssuer(config.jwt.issuer)
         .withClaim("devId", param.devId)
+        .withClaim("apiKey", param.apiKey)
+        .withClaim("apiSecret", param.apiSecret)
         .sign(Algorithm.HMAC256(config.jwt.secret))
 }

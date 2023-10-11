@@ -1,15 +1,20 @@
-image: gradle:8.1.1-jdk17-alpine
+image: gradle:8.1.1-jdk17
 
 variables:
   GOOGLE_CLI_URL: https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz
+  GRPC_JAVA_PROTOC_GEN_URL: https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.57.2/protoc-gen-grpc-java-1.57.2-linux-x86_64.exe
 
 before_script:
+  - export PATH="/usr/local/bin:$PATH"
   - export GRADLE_USER_HOME=`pwd`/.gradle
   - chmod +x gradlew
+  - wget $GRPC_JAVA_PROTOC_GEN_URL -O /usr/local/bin/protoc-gen-grpc-java.exe
+  - chmod +x /usr/local/bin/protoc-gen-grpc-java.exe
+  - ls -l /usr/local/bin
 
 stages:
-  - build
   - test
+  - build
   - deploy
 
 build:
@@ -18,7 +23,6 @@ build:
     - develop
     - main
   script:
-    - ./gradlew :compiler:build
     - ./gradlew shadowJar
 
 test:

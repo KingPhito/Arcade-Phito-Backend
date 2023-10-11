@@ -29,6 +29,20 @@
     "expiration": {
       "env": "JWT_EXPIRES_IN"
     }
+  },
+  "admin": {
+    "developerId": {
+      "env": "ADMIN_DEVELOPER_ID"
+    },
+    "email": {
+      "env": "ADMIN_EMAIL"
+    },
+    "apiKey": {
+      "env": "ADMIN_API_KEY"
+    },
+    "apiSecret": {
+      "env": "ADMIN_API_SECRET"
+    }
   }
 }
 

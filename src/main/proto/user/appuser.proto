@@ -23,7 +23,7 @@ message CreateUserRequest {
 }
 
 message CreateUserResponse {
-  ArcadePhitoUser user = 1;
+  ArcadePhitoUser appUser = 1;
   google.rpc.Status status = 2;
 }
 
@@ -34,6 +34,6 @@ message AuthenticateUserRequest {
 }
 
 message AuthenticateUserResponse {
-  ArcadePhitoUser user = 1;
+  ArcadePhitoUser appUser = 1;
   google.rpc.Status status = 2;
 }
