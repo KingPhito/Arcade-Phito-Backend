@@ -26,7 +26,7 @@ version = "1.0-SNAPSHOT"
 appengine {
     configure<AppEngineAppYamlExtension> {
         stage {
-            setArtifact("build/libs/${project.name}-all.jar")
+            setArtifact("build/libs/${project.name}-$version.jar")
         }
         deploy {
             stopPreviousVersion = true
