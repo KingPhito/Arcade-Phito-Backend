@@ -17,7 +17,7 @@ plugins {
     id("com.google.protobuf") version "0.9.4"
     id("app.cash.sqldelight") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.google.cloud.tools.appengine") version "2.4.2"
+    id("com.google.cloud.tools.appengine") version "2.4.5"
 }
 
 group = "com.ralphdugue.arcadephito-grpc"
