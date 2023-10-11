@@ -13,8 +13,8 @@ before_script:
   - ls -l /usr/local/bin
 
 stages:
-  - build
   - test
+  - build
   - deploy
 
 build:
