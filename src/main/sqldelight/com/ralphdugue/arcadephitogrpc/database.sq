@@ -1,0 +1,78 @@
+CREATE TABLE api_credentials (
+  id SERIAL NOT NULL,
+  developer_id VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  api_key_hash VARCHAR(255) NOT NULL,
+  api_secret_hash VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+createApiUser:
+INSERT INTO api_credentials (developer_id, email, api_key_hash, api_secret_hash)
+VALUES (?, ?, ?, ?)
+RETURNING developer_id;
+
+getApiUser:
+SELECT * FROM api_credentials WHERE developer_id = ?;
+
+CREATE TABLE app_user (
+  id SERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  date_of_birth DATE NOT NULL,
+  password_hash VARCHAR(64) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+insertUser:
+INSERT INTO app_user (name, email, date_of_birth, password_hash)
+VALUES (?, ?, ?, ?)
+RETURNING name;
+
+selectUser:
+SELECT * FROM app_user WHERE name = ?;
+
+updateUser:
+UPDATE app_user SET name = ?, email = ?, date_of_birth = ?, password_hash = ? WHERE name = ?;
+
+deleteUser:
+DELETE FROM app_user WHERE id = ?;
+
+CREATE TABLE game (
+  id SERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  genre VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO game (name, description, genre)
+VALUES ('TicTacToe', 'Tic Tac Toe is a game for two players, X and O, who take turns marking the spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner.', 'Strategy');
+
+CREATE TABLE game_session (
+  id SERIAL NOT NULL,
+  game_id INT NOT NULL,
+  start_time TIMESTAMP NOT NULL,
+  end_time TIMESTAMP,
+  players VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (game_id) REFERENCES game (id)
+);
+
+createGameSession:
+INSERT INTO game_session (game_id, start_time, end_time, players)
+VALUES (?, ?, ?, ?);
+
+CREATE TABLE played_game (
+  user_id INT NOT NULL,
+  game_id INT NOT NULL,
+  date_played DATE NOT NULL,
+  score INT NOT NULL,
+  PRIMARY KEY (user_id, game_id),
+  FOREIGN KEY (user_id) REFERENCES app_user (id),
+  FOREIGN KEY (game_id) REFERENCES game (id)
+);
+
+insertPlayedGame:
+INSERT INTO played_game (user_id, game_id, date_played, score)
+VALUES (?, ?, ?, ?);

@@ -1,9 +1,12 @@
 package com.ralphdugue.arcadephitogrpc.services
 
 import com.google.rpc.Status
+import com.google.type.Date
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.LoginAttemptParams
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.RegisterUserParams
+import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.RetrieveAppUserParams
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RegisterAppUser
+import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RetrieveAppUser
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.VerifyLoginAttempt
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
@@ -16,7 +19,8 @@ import java.time.LocalDate
 class AppUserService(
     private val registerAppUser: RegisterAppUser,
     private val verifyLoginAttempt: VerifyLoginAttempt,
-    private val verifyDeveloperToken: VerifyDeveloperToken
+    private val verifyDeveloperToken: VerifyDeveloperToken,
+    private val retrieveAppUser: RetrieveAppUser
 ) : AppUserServiceGrpcKt.AppUserServiceCoroutineImplBase() {
 
     override suspend fun createUser(request: CreateUserRequest): Appuser.CreateUserResponse {
@@ -40,6 +44,7 @@ class AppUserService(
                     .setMessage("Invalid token")
                     .build()
                 Appuser.CreateUserResponse.newBuilder()
+                    .setAppUser(ArcadePhitoUser.getDefaultInstance())
                     .setStatus(status)
                     .build()
             }
@@ -54,7 +59,7 @@ class AppUserService(
                     .setMessage("User created successfully")
                     .build()
                 Appuser.CreateUserResponse.newBuilder()
-                    .setUser(user)
+                    .setAppUser(user)
                     .setStatus(status)
                     .build()
             }
@@ -64,6 +69,7 @@ class AppUserService(
                     .setMessage("User could not be created")
                     .build()
                 Appuser.CreateUserResponse.newBuilder()
+                    .setAppUser(ArcadePhitoUser.getDefaultInstance())
                     .setStatus(status)
                     .build()
             }
@@ -86,15 +92,28 @@ class AppUserService(
                     .build()
                 Appuser.AuthenticateUserResponse.newBuilder()
                     .setStatus(status)
+                    .setAppUser(ArcadePhitoUser.getDefaultInstance())
                     .build()
             }
             userAuthenticated -> {
+                val user = retrieveAppUser.execute(RetrieveAppUserParams(request.name))
+                val localDate = LocalDate.parse(user.birthdate)
+                val userAccount = ArcadePhitoUser.newBuilder()
+                    .setName(user.username)
+                    .setEmail(user.email)
+                    .setBirthdate(Date.newBuilder()
+                        .setYear(localDate.year)
+                        .setMonth(localDate.monthValue)
+                        .setDay(localDate.dayOfMonth)
+                        .build())
+                    .build()
                 val status = Status.newBuilder()
                     .setCode(200)
                     .setMessage("User authenticated successfully")
                     .build()
                 Appuser.AuthenticateUserResponse.newBuilder()
                     .setStatus(status)
+                    .setAppUser(userAccount)
                     .build()
             }
             else -> {
@@ -104,6 +123,7 @@ class AppUserService(
                     .build()
                 Appuser.AuthenticateUserResponse.newBuilder()
                     .setStatus(status)
+                    .setAppUser(ArcadePhitoUser.getDefaultInstance())
                     .build()
             }
         }

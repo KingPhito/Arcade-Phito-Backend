@@ -1,14 +1,14 @@
 package com.ralphdugue.arcadephitogrpc.adapters.appusers
 
-import com.ralphdugue.arcadephitogrpc.ArcadePhito
+import com.ralphdugue.arcadephitogrpc.ArcadePhitoDB
 import com.ralphdugue.arcadephitogrpc.domain.appusers.AppUserRepository
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.UserAccount
 import java.time.LocalDate
 
-class AppUserRepositoryImpl(private val arcadePhitoDB: ArcadePhito) : AppUserRepository {
+class AppUserRepositoryImpl(private val arcadePhitoDB: ArcadePhitoDB) : AppUserRepository {
 
     override suspend fun getUserAccount(username: String): UserAccount? {
-        return arcadePhitoDB.usersQueries.selectUser(username)
+        return arcadePhitoDB.databaseQueries.selectUser(username)
             .executeAsOneOrNull()?.let { user ->
                 UserAccount(
                     username = user.name,
@@ -25,7 +25,7 @@ class AppUserRepositoryImpl(private val arcadePhitoDB: ArcadePhito) : AppUserRep
         birthdate: String,
         passwordHash: String
     ): Boolean {
-        return arcadePhitoDB.usersQueries.insertUser(
+        return arcadePhitoDB.databaseQueries.insertUser(
             name = username,
             password_hash = passwordHash,
             email = email,

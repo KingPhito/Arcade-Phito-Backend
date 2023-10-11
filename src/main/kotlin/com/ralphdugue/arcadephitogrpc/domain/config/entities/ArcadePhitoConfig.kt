@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 data class ArcadePhitoConfig(
     val port: Int,
     val db: DatabaseConfig,
-    val jwt: JWTConfig
+    val jwt: JWTConfig,
+    val admin: AdminConfig
 )
 
 @Serializable
@@ -23,4 +24,12 @@ data class JWTConfig(
     val issuer: String,
     val audience: String,
     val expiration: Long
+)
+
+@Serializable
+data class AdminConfig(
+    val developerId: String,
+    val email: String,
+    val apiKey: String,
+    val apiSecret: String
 )
