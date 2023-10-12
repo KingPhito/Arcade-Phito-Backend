@@ -107,7 +107,7 @@ tasks.register("renameJar") {
     }
 }
 
-tasks.appengineDeploy {
+tasks.build {
     dependsOn("renameJar")
 }
 
