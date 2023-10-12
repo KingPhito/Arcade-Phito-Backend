@@ -26,7 +26,7 @@ version = "1.0-SNAPSHOT"
 appengine {
     configure<AppEngineAppYamlExtension> {
         stage {
-            setArtifact("build/libs/${project.name}-$version.jar")
+            setArtifact("build/libs/${project.name}.jar")
         }
         deploy {
             stopPreviousVersion = true
@@ -95,10 +95,20 @@ sqldelight {
         create("ArcadePhitoDB") {
             packageName.set("com.ralphdugue.arcadephitogrpc")
             dialect("app.cash.sqldelight:postgresql-dialect:2.0.0")
-//            srcDirs("sqldelight")
-//            deriveSchemaFromMigrations.set(true)
         }
     }
+}
+
+tasks.register("renameJar") {
+    copy {
+        from("build/libs/${project.name}-$version.jar")
+        into("build/libs")
+        rename("${project.name}-$version.jar", "${project.name}.jar")
+    }
+}
+
+tasks.build {
+    dependsOn("renameJar")
 }
 
 tasks.test {
