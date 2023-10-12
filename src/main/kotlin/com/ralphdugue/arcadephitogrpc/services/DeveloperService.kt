@@ -16,9 +16,7 @@ class DeveloperService(
     private val validateDeveloper: ValidateDeveloper,
     private val generateDeveloperToken: GenerateDeveloperToken,
     private val verifyDeveloperToken: VerifyDeveloperToken
-) :
-
-    DeveloperServiceGrpcKt.DeveloperServiceCoroutineImplBase() {
+) : DeveloperServiceGrpcKt.DeveloperServiceCoroutineImplBase() {
 
     override suspend fun createDeveloper(request: Developer.CreateDeveloperRequest): Developer.CreateDeveloperResponse {
         val validToken = verifyDeveloperToken.execute(VerifyDeveloperTokenParams(token = request.token))

@@ -3,12 +3,22 @@ package com.ralphdugue.arcadephitogrpc.adapters.developers
 import com.ralphdugue.arcadephitogrpc.ArcadePhitoDB
 import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.DeveloperAccount
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 
-class DeveloperRepositoryImpl(private val arcadePhitoDB: ArcadePhitoDB) : DeveloperRepository {
+class DeveloperRepositoryImpl(
+    private val arcadePhitoDB: ArcadePhitoDB,
+    private val logger: KLogger = KotlinLogging.logger {}
+) : DeveloperRepository {
     override suspend fun getDeveloperCredentials(devId: String): DeveloperAccount? {
-        val row = arcadePhitoDB.databaseQueries
-            .getApiUser(devId)
-            .executeAsOneOrNull()
+        val row = try {
+            arcadePhitoDB.databaseQueries
+                .getApiUser(devId)
+                .executeAsOneOrNull()
+        } catch (e: Exception) {
+            logger.debug(e) { "Error retrieving developer credentials for $devId." }
+            null
+        }
         return if (row != null) {
             DeveloperAccount(
                 devId = row.developer_id,
@@ -27,12 +37,17 @@ class DeveloperRepositoryImpl(private val arcadePhitoDB: ArcadePhitoDB) : Develo
         apiKeyHash: String,
         apiSecretHash: String
     ): Boolean {
-        val createdDev = arcadePhitoDB.databaseQueries.createApiUser(
-            developer_id = devId,
-            email = email,
-            api_key_hash = apiKeyHash,
-            api_secret_hash = apiSecretHash
-        ).executeAsOneOrNull()
+        val createdDev = try {
+            arcadePhitoDB.databaseQueries.createApiUser(
+                developer_id = devId,
+                email = email,
+                api_key_hash = apiKeyHash,
+                api_secret_hash = apiSecretHash
+            ).executeAsOneOrNull()
+        } catch (e: Exception) {
+            logger.debug(e) { "Error adding developer credentials for $devId." }
+            null
+        }
         return if (createdDev != null) {
             createdDev == devId
         } else {

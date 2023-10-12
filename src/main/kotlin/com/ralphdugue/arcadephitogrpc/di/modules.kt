@@ -22,13 +22,11 @@ import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import com.ralphdugue.arcadephitogrpc.services.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.DeveloperService
 import org.koin.dsl.module
-import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 val config = module {
     single { ArcadePhitoConfigFactory.create() }
     single { BCryptPasswordEncoder(16) }
-    single { LoggerFactory.getLogger("ArcadePhito") }
 }
 
 val database = module {
@@ -55,5 +53,5 @@ val useCases = module {
 
 val services = module {
     single { DeveloperService(get(), get(), get(), get()) }
-    single { AppUserService(get(), get(), get(), get()) }
+    single { AppUserService(get(), get(), get()) }
 }

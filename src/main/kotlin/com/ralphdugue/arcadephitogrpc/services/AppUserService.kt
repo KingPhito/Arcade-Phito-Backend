@@ -4,9 +4,7 @@ import com.google.rpc.Status
 import com.google.type.Date
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.LoginAttemptParams
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.RegisterUserParams
-import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.RetrieveAppUserParams
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RegisterAppUser
-import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RetrieveAppUser
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.VerifyLoginAttempt
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
@@ -19,8 +17,7 @@ import java.time.LocalDate
 class AppUserService(
     private val registerAppUser: RegisterAppUser,
     private val verifyLoginAttempt: VerifyLoginAttempt,
-    private val verifyDeveloperToken: VerifyDeveloperToken,
-    private val retrieveAppUser: RetrieveAppUser
+    private val verifyDeveloperToken: VerifyDeveloperToken
 ) : AppUserServiceGrpcKt.AppUserServiceCoroutineImplBase() {
 
     override suspend fun createUser(request: CreateUserRequest): Appuser.CreateUserResponse {
@@ -77,7 +74,7 @@ class AppUserService(
     }
 
     override suspend fun authenticateUser(request: Appuser.AuthenticateUserRequest): Appuser.AuthenticateUserResponse {
-        val userAuthenticated = verifyLoginAttempt.execute(
+        val (userAuthenticated, user) = verifyLoginAttempt.execute(
             LoginAttemptParams(
                 username = request.name,
                 password = request.password
@@ -96,8 +93,7 @@ class AppUserService(
                     .build()
             }
             userAuthenticated -> {
-                val user = retrieveAppUser.execute(RetrieveAppUserParams(request.name))
-                val localDate = LocalDate.parse(user.birthdate)
+                val localDate = LocalDate.parse(user!!.birthdate)
                 val userAccount = ArcadePhitoUser.newBuilder()
                     .setName(user.username)
                     .setEmail(user.email)

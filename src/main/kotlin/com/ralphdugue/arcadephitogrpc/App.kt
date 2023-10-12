@@ -5,8 +5,8 @@ import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.ArcadePhitoConfig
 import com.ralphdugue.arcadephitogrpc.services.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.DeveloperService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.grpc.ServerBuilder
-import io.grpc.ServerServiceDefinition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,6 +23,8 @@ class ArcadePhitoServer : KoinComponent {
     private val developerService: DeveloperService by inject()
     private val appUserService: AppUserService by inject()
 
+    private val logger = KotlinLogging.logger {}
+
     private val server = ServerBuilder
         .forPort(config.port)
         .addService(developerService)
@@ -33,12 +35,12 @@ class ArcadePhitoServer : KoinComponent {
             configRepository.initDatabase()
             withContext(Dispatchers.Main) {
                 server.start()
-                println("Server started, listening on ${config.port}")
+                logger.info { "Server started, listening on ${config.port}" }
                 Runtime.getRuntime().addShutdownHook(
                     Thread {
-                        println("*** shutting down gRPC server since JVM is shutting down")
+                        logger.info { "*** shutting down gRPC server since JVM is shutting down" }
                         this@ArcadePhitoServer.stop()
-                        println("*** server shut down")
+                        logger.info { "*** server shut down" }
                     }
                 )
             }
@@ -54,7 +56,7 @@ class ArcadePhitoServer : KoinComponent {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     startKoin {
         slf4jLogger()
         modules(config, database, repositories, useCases, services)
