@@ -23,10 +23,15 @@ plugins {
 group = "com.ralphdugue.arcadephito-grpc"
 version = "1.0-SNAPSHOT"
 
+shadow {
+    archivesName.set("${project.name}-all")
+    version = ""
+}
+
 appengine {
     configure<AppEngineAppYamlExtension> {
         stage {
-            setArtifact("build/libs/${project.name}.jar")
+            setArtifact("build/libs/${project.name}-all.jar")
         }
         deploy {
             stopPreviousVersion = true
@@ -97,18 +102,6 @@ sqldelight {
             dialect("app.cash.sqldelight:postgresql-dialect:2.0.0")
         }
     }
-}
-
-tasks.register("renameJar") {
-    copy {
-        from("build/libs/${project.name}-$version-all.jar")
-        into("build/libs")
-        rename("${project.name}-$version.jar", "${project.name}.jar")
-    }
-}
-
-tasks.shadowJar {
-    dependsOn("renameJar")
 }
 
 tasks.test {
