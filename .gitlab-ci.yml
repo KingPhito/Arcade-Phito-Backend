@@ -24,6 +24,9 @@ build:
     - main
   script:
     - ./gradlew shadowJar
+  artifacts:
+    paths:
+      - build/libs/*.jar
 
 test:
   stage: test
