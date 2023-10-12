@@ -1,5 +1,6 @@
 import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 import com.google.protobuf.gradle.*
+import org.gradle.internal.component.model.AttributeMatchingExplanationBuilder.logging
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 val kotlin_version: String by project
@@ -54,6 +55,7 @@ dependencies {
     implementation("io.insert-koin:koin-core")
     implementation("io.insert-koin:koin-logger-slf4j")
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+    implementation("com.google.cloud:google-cloud-logging-logback:0.130.23-alpha")
     implementation("io.grpc:grpc-kotlin-stub:$grpc_kotlin_version")
     implementation("io.grpc:grpc-protobuf:$grpc_version")
     implementation("io.grpc:grpc-netty:$grpc_version")
@@ -104,6 +106,7 @@ sqldelight {
         }
     }
 }
+
 
 tasks.test {
     useJUnitPlatform()

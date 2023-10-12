@@ -1,0 +1,10 @@
+<configuration>
+    <appender name="CLOUD" class="com.google.cloud.logging.logback.appender.CloudLoggingAppender">
+        <projectId>${GOOGLE_CLOUD_PROJECT}</projectId>
+        <logName>my-log</logName>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CLOUD"/>
+    </root>
+</configuration>
