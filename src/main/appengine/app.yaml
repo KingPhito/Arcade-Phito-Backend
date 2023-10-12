@@ -1,2 +1,2 @@
 runtime: java17
-entrypoint: 'java -jar google-appengine-standard-1.0-SNAPSHOT-all.jar'
+entrypoint: 'java -jar arcade-phito-grpc.jar'
