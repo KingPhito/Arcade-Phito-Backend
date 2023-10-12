@@ -1,2 +1,2 @@
 runtime: java17
-entrypoint: 'java -jar arcade-phito-grpc.jar'
+entrypoint: 'java -jar arcade-phito-grpc-all.jar'
