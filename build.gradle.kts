@@ -101,13 +101,13 @@ sqldelight {
 
 tasks.register("renameJar") {
     copy {
-        from("build/libs/${project.name}-$version.jar")
+        from("build/libs/${project.name}-$version-all.jar")
         into("build/libs")
         rename("${project.name}-$version.jar", "${project.name}.jar")
     }
 }
 
-tasks.build {
+tasks.shadowJar {
     dependsOn("renameJar")
 }
 
