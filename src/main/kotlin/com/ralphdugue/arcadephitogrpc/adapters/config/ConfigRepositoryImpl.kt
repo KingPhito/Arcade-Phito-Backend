@@ -6,30 +6,39 @@ import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.ArcadePhitoConfig
 import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
+import io.github.oshai.kotlinlogging.KLogger
+import io.github.oshai.kotlinlogging.KotlinLogging
 import java.sql.SQLException
 
 class ConfigRepositoryImpl(
     private val driver: SqlDriver,
     private val arcadePhitoConfig: ArcadePhitoConfig,
     private val developerRepository: DeveloperRepository,
-    private val securityRepository: SecurityRepository
+    private val securityRepository: SecurityRepository,
+    private val logger: KLogger = KotlinLogging.logger {}
 ) : ConfigRepository {
 
     override suspend fun initDatabase() {
         try {
             ArcadePhitoDB.Schema.create(driver)
         } catch (e: SQLException) {
-            println("Database account already exists")
+            logger.warn(e) { "Error creating database schema. It likely already exists." }
+        } catch (e: Exception) {
+            logger.error(e) { "Error creating database schema." }
+            throw e
         }
         try {
             developerRepository.addDeveloperCredentials(
                 devId = arcadePhitoConfig.admin.developerId,
                 email = arcadePhitoConfig.admin.email,
-                apiKeyHash = securityRepository.hashData(arcadePhitoConfig.admin.apiKey),
-                apiSecretHash = securityRepository.hashData(arcadePhitoConfig.admin.apiSecret)
+                apiKeyHash = securityRepository.hashData(arcadePhitoConfig.admin.apiKey)!!,
+                apiSecretHash = securityRepository.hashData(arcadePhitoConfig.admin.apiSecret)!!
             )
         } catch (e: SQLException) {
-            println("Admin account already exists")
+            logger.warn(e) { "Error adding developer credentials. They likely already exists." }
+        } catch (e: Exception) {
+            logger.error(e) { "Error adding developer credentials." }
+            throw e
         }
     }
 }

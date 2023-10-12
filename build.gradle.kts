@@ -53,6 +53,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("io.insert-koin:koin-core")
     implementation("io.insert-koin:koin-logger-slf4j")
+    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
     implementation("io.grpc:grpc-kotlin-stub:$grpc_kotlin_version")
     implementation("io.grpc:grpc-protobuf:$grpc_version")
     implementation("io.grpc:grpc-netty:$grpc_version")
