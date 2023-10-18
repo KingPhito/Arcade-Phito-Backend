@@ -4,7 +4,7 @@ import app.cash.sqldelight.db.SqlDriver
 import com.ralphdugue.arcadephitogrpc.ArcadePhitoDB
 import com.ralphdugue.arcadephitogrpc.adapters.DatabaseFactory
 import com.ralphdugue.arcadephitogrpc.adapters.appusers.AppUserRepositoryImpl
-import com.ralphdugue.arcadephitogrpc.adapters.config.ArcadePhitoConfigFactory
+import com.ralphdugue.arcadephitogrpc.adapters.config.ConfigFactory
 import com.ralphdugue.arcadephitogrpc.adapters.config.ConfigRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.developers.DeveloperRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.security.SecurityRepositoryImpl
@@ -25,12 +25,12 @@ import org.koin.dsl.module
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 val config = module {
-    single { ArcadePhitoConfigFactory.create() }
     single { BCryptPasswordEncoder(16) }
+    single { ConfigFactory.loadConfig() }
 }
 
 val database = module {
-    single<SqlDriver> { DatabaseFactory.create(get()).apply {  } }
+    single<SqlDriver> { DatabaseFactory.create(get()) }
     single { ArcadePhitoDB(get()) }
 }
 

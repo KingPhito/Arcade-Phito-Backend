@@ -7,10 +7,7 @@ import com.ralphdugue.arcadephitogrpc.services.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.DeveloperService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.grpc.ServerBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.context.startKoin
@@ -18,10 +15,11 @@ import org.koin.logger.slf4jLogger
 
 class ArcadePhitoServer : KoinComponent {
 
-    private val config: ArcadePhitoConfig by inject()
     private val configRepository: ConfigRepository by inject()
     private val developerService: DeveloperService by inject()
     private val appUserService: AppUserService by inject()
+
+    private val config: ArcadePhitoConfig by inject()
 
     private val logger = KotlinLogging.logger {}
 
