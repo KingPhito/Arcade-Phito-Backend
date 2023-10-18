@@ -24,6 +24,12 @@ plugins {
 group = "com.ralphdugue.arcadephito-grpc"
 version = "1.0-SNAPSHOT"
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.ralphdugue.arcadephitogrpc.App"
+    }
+}
+
 shadow {
     archivesName.set("${project.name}-all")
     version = ""
