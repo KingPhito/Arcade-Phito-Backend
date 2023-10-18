@@ -12,9 +12,9 @@ import java.sql.SQLException
 
 class ConfigRepositoryImpl(
     private val driver: SqlDriver,
-    private val arcadePhitoConfig: ArcadePhitoConfig,
     private val developerRepository: DeveloperRepository,
     private val securityRepository: SecurityRepository,
+    private val arcadePhitoConfig: ArcadePhitoConfig,
     private val logger: KLogger = KotlinLogging.logger {}
 ) : ConfigRepository {
 

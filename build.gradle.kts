@@ -50,6 +50,7 @@ repositories {
 
 dependencies {
     implementation(platform("io.insert-koin:koin-bom:$koin_version"))
+    implementation(platform("com.google.cloud:libraries-bom:26.25.0"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("io.insert-koin:koin-core")
@@ -66,6 +67,8 @@ dependencies {
     implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
     implementation("com.zaxxer:HikariCP:5.0.1")
     implementation("com.auth0:java-jwt:4.4.0")
+    implementation("com.google.cloud:google-cloud-secretmanager")
+    implementation("com.google.cloud:google-cloud-core")
     implementation("org.springframework.security:spring-security-core:6.0.3")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
@@ -79,7 +82,6 @@ protobuf {
     plugins {
         id("grpc") {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpc_version"
-            //path = "/usr/local/bin/protoc-gen-grpc-java.exe"
         }
         id("grpckt") {
             artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpc_kotlin_version}:jdk8@jar"
