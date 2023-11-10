@@ -27,6 +27,9 @@ build:
 
 test:
   stage: test
+  only:
+    - develop
+    - main
   script:
     - ./gradlew test
 

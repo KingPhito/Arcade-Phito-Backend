@@ -3,8 +3,9 @@ package com.ralphdugue.arcadephitogrpc
 import com.ralphdugue.arcadephitogrpc.di.*
 import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.ArcadePhitoConfig
-import com.ralphdugue.arcadephitogrpc.services.AppUserService
+import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.DeveloperService
+import com.ralphdugue.arcadephitogrpc.services.appuser.UserServiceInterceptor
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.grpc.ServerBuilder
 import kotlinx.coroutines.*
@@ -18,6 +19,7 @@ class ArcadePhitoServer : KoinComponent {
     private val configRepository: ConfigRepository by inject()
     private val developerService: DeveloperService by inject()
     private val appUserService: AppUserService by inject()
+    private val userServiceInterceptor: UserServiceInterceptor by inject()
 
     private val config: ArcadePhitoConfig by inject()
 
@@ -25,7 +27,7 @@ class ArcadePhitoServer : KoinComponent {
 
     private val server = ServerBuilder
         .forPort(config.port)
-        .addService(developerService)
+        .addService(developerService).intercept(userServiceInterceptor)
         .addService(appUserService)
         .build()
     fun start() {
@@ -57,7 +59,7 @@ class ArcadePhitoServer : KoinComponent {
 fun main() {
     startKoin {
         slf4jLogger()
-        modules(config, database, repositories, useCases, services)
+        modules(config, database, repositories, useCases, interceptors, services)
     }
     val server = ArcadePhitoServer()
     server.start()

@@ -1,4 +1,4 @@
 runtime: java17
 env_variables:
   ENVIRONMENT: "prod"
-entrypoint: 'java -jar arcade-phito-grpc-all.jar'
+entrypoint: 'java -jar arcade-phito-grpc-fat-all.jar'

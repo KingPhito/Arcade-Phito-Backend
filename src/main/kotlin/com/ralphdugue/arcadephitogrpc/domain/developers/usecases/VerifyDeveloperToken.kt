@@ -8,6 +8,8 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class VerifyDeveloperToken(
     private val config: ArcadePhitoConfig,
@@ -20,10 +22,18 @@ class VerifyDeveloperToken(
             val verifier = JWT.decode(param.token)
             val account = developerRepository.getDeveloperCredentials(verifier.getClaim("devId").asString())
             account?.let {
-                verifier.audience.contains(config.jwt.audience) &&
-                verifier.issuer == config.jwt.issuer &&
-                securityRepository.verifyHash(account.apiKeyHash, verifier.getClaim("apiKey").asString()) &&
-                securityRepository.verifyHash(account.apiSecretHash, verifier.getClaim("apiSecret").asString())
+                withContext(Dispatchers.Default) {
+                    verifier.audience.contains(config.jwt.audience) &&
+                            verifier.issuer == config.jwt.issuer &&
+                            securityRepository.verifyHash(
+                                data = account.apiKeyHash,
+                                hash = verifier.getClaim("apiKey").asString()
+                            ) &&
+                            securityRepository.verifyHash(
+                                data = account.apiSecretHash,
+                                hash = verifier.getClaim("apiSecret").asString()
+                            )
+                }
             } ?: false
         } catch (e: Exception) {
             logger.debug(e) { "Error verifying developer token." }

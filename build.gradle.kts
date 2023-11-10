@@ -24,21 +24,21 @@ plugins {
 group = "com.ralphdugue.arcadephito-grpc"
 version = "1.0-SNAPSHOT"
 
-tasks.jar {
+tasks.shadowJar {
     manifest {
-        attributes["Main-Class"] = "com.ralphdugue.arcadephitogrpc.App"
+        attributes["Main-Class"] = "com.ralphdugue.arcadephitogrpc.AppKt"
     }
 }
 
 shadow {
-    archivesName.set("${project.name}-all")
+    archivesName.set("${project.name}-fat")
     version = ""
 }
 
 appengine {
     configure<AppEngineAppYamlExtension> {
         stage {
-            setArtifact("build/libs/${project.name}-all.jar")
+            setArtifact("build/libs/${project.name}-fat-all.jar")
         }
         deploy {
             stopPreviousVersion = true

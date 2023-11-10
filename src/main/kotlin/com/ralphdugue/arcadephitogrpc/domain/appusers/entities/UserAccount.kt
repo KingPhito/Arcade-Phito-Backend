@@ -7,4 +7,10 @@ data class UserAccount(
     val passwordHash: String,
     val email: String,
     val birthdate: String,
+    val records: List<GameRecord> = listOf()
+): Entity
+
+data class GameRecord(
+    val gameName: String,
+    val score: String
 ): Entity

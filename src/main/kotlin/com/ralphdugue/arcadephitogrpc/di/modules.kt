@@ -19,8 +19,9 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.GenerateDevelop
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.ValidateDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
-import com.ralphdugue.arcadephitogrpc.services.AppUserService
+import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.DeveloperService
+import com.ralphdugue.arcadephitogrpc.services.appuser.UserServiceInterceptor
 import org.koin.dsl.module
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
@@ -51,7 +52,11 @@ val useCases = module {
     single { RetrieveAppUser(get()) }
 }
 
+val interceptors = module {
+    single { UserServiceInterceptor(get()) }
+}
+
 val services = module {
     single { DeveloperService(get(), get(), get(), get()) }
-    single { AppUserService(get(), get(), get()) }
+    single { AppUserService(get(), get()) }
 }
