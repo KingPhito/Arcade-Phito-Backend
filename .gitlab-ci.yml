@@ -50,3 +50,5 @@ deploy:
 
 after_script:
   - rm -rf gcloud-sdk.tar.gz google-cloud-sdk gcloud-service-key.json
+  - ./gradlew clean
+  - rm -rf .gradle
