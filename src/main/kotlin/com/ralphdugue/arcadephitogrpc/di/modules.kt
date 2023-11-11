@@ -57,6 +57,6 @@ val interceptors = module {
 }
 
 val services = module {
-    single { DeveloperService(get(), get(), get(), get()) }
+    single { DeveloperService(get(), get(), get()) }
     single { AppUserService(get(), get()) }
 }

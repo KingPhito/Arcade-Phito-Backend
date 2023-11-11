@@ -2,3 +2,5 @@ runtime: java17
 env_variables:
   ENVIRONMENT: "prod"
 entrypoint: 'java -jar arcade-phito-grpc-fat-all.jar'
+vpc_access_connector:
+  name: "projects/pc-api-8818799683784565967-353/locations/us-east1/connectors/app-engine-sql"

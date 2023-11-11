@@ -13,8 +13,8 @@ val protobuf_version : String by project
 val h2_version : String by project
 
 plugins {
-    kotlin("jvm") version "1.9.0"
-    kotlin("plugin.serialization") version "1.9.0"
+    kotlin("jvm") version "1.9.20"
+    kotlin("plugin.serialization") version "1.9.20"
     id("com.google.protobuf") version "0.9.4"
     id("app.cash.sqldelight") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -23,12 +23,6 @@ plugins {
 
 group = "com.ralphdugue.arcadephito-grpc"
 version = "1.0-SNAPSHOT"
-
-tasks.shadowJar {
-    manifest {
-        attributes["Main-Class"] = "com.ralphdugue.arcadephitogrpc.AppKt"
-    }
-}
 
 shadow {
     archivesName.set("${project.name}-fat")
@@ -115,9 +109,19 @@ sqldelight {
     }
 }
 
-
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = "com.ralphdugue.arcadephitogrpc.AppKt"
+    }
+    mergeServiceFiles()
+}
+
+tasks.appengineStage {
+    dependsOn(tasks.shadowJar)
 }
 
 kotlin {

@@ -31,19 +31,19 @@ class ArcadePhitoServer : KoinComponent {
         .addService(appUserService)
         .build()
     fun start() {
-        GlobalScope.launch(Dispatchers.IO) {
-            configRepository.initDatabase()
-            withContext(Dispatchers.Main) {
-                server.start()
-                logger.info { "Server started, listening on ${config.port}" }
-                Runtime.getRuntime().addShutdownHook(
-                    Thread {
-                        logger.info { "*** shutting down gRPC server since JVM is shutting down" }
-                        this@ArcadePhitoServer.stop()
-                        logger.info { "*** server shut down" }
-                    }
-                )
-            }
+        GlobalScope.launch(Dispatchers.Main) {
+            launch(Dispatchers.IO) {
+                configRepository.initDatabase()
+            }.join()
+            server.start()
+            logger.info { "Server started, listening on ${config.port}" }
+            Runtime.getRuntime().addShutdownHook(
+                Thread {
+                    logger.info { "*** shutting down gRPC server since JVM is shutting down" }
+                    this@ArcadePhitoServer.stop()
+                    logger.info { "*** server shut down" }
+                }
+            )
         }
     }
 
