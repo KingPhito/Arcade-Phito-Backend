@@ -1,4 +1,4 @@
-package com.ralphdugue.arcadephitogrpc.services.appuser
+package com.ralphdugue.arcadephitogrpc.services
 
 import io.grpc.Status
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloperTokenParams
@@ -12,7 +12,7 @@ import io.grpc.ServerInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-class UserServiceInterceptor(
+class ServiceInterceptor(
     private val verifyDeveloperToken: VerifyDeveloperToken,
     private val logger: KLogger = KotlinLogging.logger {}
 ): ServerInterceptor {

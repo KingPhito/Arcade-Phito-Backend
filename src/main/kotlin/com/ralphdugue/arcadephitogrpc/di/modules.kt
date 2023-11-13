@@ -21,7 +21,7 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.DeveloperService
-import com.ralphdugue.arcadephitogrpc.services.appuser.UserServiceInterceptor
+import com.ralphdugue.arcadephitogrpc.services.ServiceInterceptor
 import org.koin.dsl.module
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
@@ -53,7 +53,7 @@ val useCases = module {
 }
 
 val interceptors = module {
-    single { UserServiceInterceptor(get()) }
+    single { ServiceInterceptor(get()) }
 }
 
 val services = module {

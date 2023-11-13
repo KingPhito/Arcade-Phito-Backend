@@ -52,6 +52,6 @@ class CreateDeveloper(
         val bytes = ByteArray(32)
         secureRandom.nextBytes(bytes)
 
-        return name + Base64.encode(bytes)
+        return name.lowercase() + Base64.encode(bytes)
     }
 }

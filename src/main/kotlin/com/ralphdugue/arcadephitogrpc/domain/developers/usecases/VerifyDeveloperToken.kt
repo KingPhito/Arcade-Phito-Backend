@@ -23,16 +23,17 @@ class VerifyDeveloperToken(
             val account = developerRepository.getDeveloperCredentials(verifier.getClaim("devId").asString())
             account?.let {
                 withContext(Dispatchers.Default) {
-                    verifier.audience.contains(config.jwt.audience) &&
-                            verifier.issuer == config.jwt.issuer &&
-                            securityRepository.verifyHash(
-                                data = account.apiKeyHash,
-                                hash = verifier.getClaim("apiKey").asString()
-                            ) &&
-                            securityRepository.verifyHash(
-                                data = account.apiSecretHash,
-                                hash = verifier.getClaim("apiSecret").asString()
+                    val hasAudience =verifier.audience.contains(config.jwt.audience)
+                    val hasIssuer = verifier.issuer == config.jwt.issuer
+                    val verifiedKey = securityRepository.verifyHash(
+                                hash = account.apiKeyHash,
+                                data = verifier.getClaim("apiKey").asString()
                             )
+                    val verifiedSecret = securityRepository.verifyHash(
+                                hash = account.apiSecretHash,
+                                data = verifier.getClaim("apiSecret").asString()
+                            )
+                    hasAudience && hasIssuer && verifiedKey && verifiedSecret
                 }
             } ?: false
         } catch (e: Exception) {
