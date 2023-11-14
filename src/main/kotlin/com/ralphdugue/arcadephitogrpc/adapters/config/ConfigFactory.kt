@@ -15,12 +15,21 @@ object ConfigFactory {
 
     fun loadConfig(): ArcadePhitoConfig {
         val logger = KotlinLogging.logger {}
+        val env = try {
+            val secretClient = SecretManagerServiceClient.create()
+            val projectId = ServiceOptions.getDefaultProjectId()
+            getSecret(secretClient, projectId, "env")
+        } catch (e: Exception) {
+            logger.info { "Error reading env secret from GCP. Using dev configuration." }
+            "dev"
+        }
         return try {
-            val env = System.getenv("ENVIRONMENT") ?: "dev"
             when (env) {
                 "prod" -> {
+                    val secretClient = SecretManagerServiceClient.create()
+                    val projectId = ServiceOptions.getDefaultProjectId()
                     logger.info { "Using production configuration" }
-                    getProdConfig()
+                    getProdConfig(secretClient, projectId)
                 }
                 else -> {
                     logger.info { "Using development configuration" }
@@ -33,11 +42,9 @@ object ConfigFactory {
         }
     }
 
-    private fun getProdConfig(): ArcadePhitoConfig {
+    private fun getProdConfig(secretClient: SecretManagerServiceClient, projectId: String): ArcadePhitoConfig {
         val logger = KotlinLogging.logger {}
         return try {
-            val secretClient = SecretManagerServiceClient.create()
-            val projectId = ServiceOptions.getDefaultProjectId()
             ArcadePhitoConfig(
                 port = getSecret(secretClient, projectId, "port").toInt(),
                 db = DatabaseConfig(

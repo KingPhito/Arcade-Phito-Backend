@@ -8,32 +8,33 @@ service AppUserService {
   rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse) {}
 }
 
-message ArcadePhitoUser {
-  string name = 1;
-  string email = 2;
-  google.type.Date birthdate = 4;
-}
-
 message CreateUserRequest {
   string name = 1;
   string email = 2;
   string password = 3;
   google.type.Date birthdate = 4;
-  string token = 5;
 }
 
 message CreateUserResponse {
-  ArcadePhitoUser appUser = 1;
-  google.rpc.Status status = 2;
+  string token = 1;
+  ArcadePhitoUser appUser = 2;
+  google.rpc.Status status = 3;
 }
 
 message AuthenticateUserRequest {
   string name = 1;
   string password = 2;
-  string token = 3;
 }
 
 message AuthenticateUserResponse {
-  ArcadePhitoUser appUser = 1;
-  google.rpc.Status status = 2;
+  string token = 1;
+  ArcadePhitoUser appUser = 2;
+  google.rpc.Status status = 3;
+}
+
+message ArcadePhitoUser {
+  string name = 1;
+  string email = 2;
+  map<string, string> records = 3;
+  google.type.Date birthdate = 4;
 }

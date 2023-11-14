@@ -28,12 +28,13 @@ class ConfigRepositoryImpl(
             throw e
         }
         try {
-            developerRepository.addDeveloperCredentials(
+            val result = developerRepository.addDeveloperCredentials(
                 devId = arcadePhitoConfig.admin.developerId,
                 email = arcadePhitoConfig.admin.email,
                 apiKeyHash = securityRepository.hashData(arcadePhitoConfig.admin.apiKey)!!,
                 apiSecretHash = securityRepository.hashData(arcadePhitoConfig.admin.apiSecret)!!
             )
+            logger.info { "Attempt to create admin credentials returned $result: They likely already exist." }
         } catch (e: SQLException) {
             logger.warn(e) { "Error adding developer credentials. They likely already exists." }
         } catch (e: Exception) {

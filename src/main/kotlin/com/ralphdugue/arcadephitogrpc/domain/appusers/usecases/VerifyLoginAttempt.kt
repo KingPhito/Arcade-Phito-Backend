@@ -7,6 +7,8 @@ import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.UserAccount
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class VerifyLoginAttempt(
     private val appUserRepository: AppUserRepository,
@@ -21,7 +23,9 @@ class VerifyLoginAttempt(
             null
         }
         return if (userAccount != null) {
-            val validPassword = securityRepository.verifyHash(param.password, userAccount.passwordHash)
+            val validPassword = withContext(Dispatchers.Default) {
+                securityRepository.verifyHash(param.password, userAccount.passwordHash)
+            }
             Pair(validPassword, userAccount)
         } else {
             Pair(false, null)

@@ -2,7 +2,7 @@ package com.ralphdugue.arcadephitogrpc.domain.security
 
 interface SecurityRepository {
 
-    fun hashData(data: String): String?
+    suspend fun hashData(data: String): String?
 
-    fun verifyHash(data: String, hash: String): Boolean
+    suspend fun verifyHash(data: String, hash: String): Boolean
 }

@@ -13,13 +13,15 @@ class GenerateDeveloperToken(
     private val logger: KLogger = KotlinLogging.logger {}
 ) : CoroutinesUseCase<GenerateDeveloperTokenParams, String?> {
     override suspend fun execute(param: GenerateDeveloperTokenParams): String? = try {
-        JWT.create()
+        val jwt = JWT.create()
             .withAudience(config.jwt.audience)
             .withIssuer(config.jwt.issuer)
             .withClaim("devId", param.devId)
             .withClaim("apiKey", param.apiKey)
             .withClaim("apiSecret", param.apiSecret)
             .sign(Algorithm.HMAC256(config.jwt.secret))
+        logger.info { "Developer token generated." }
+        jwt
     } catch (e: Exception) {
         logger.debug(e) { "Error generating developer token." }
         null

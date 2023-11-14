@@ -6,6 +6,8 @@ import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.RegisterUserParam
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class RegisterAppUser(
     private val appUserRepository: AppUserRepository,
@@ -19,7 +21,7 @@ class RegisterAppUser(
                  username = param.username,
                  email = param.email,
                  birthdate = param.birthdate.toString(),
-                 passwordHash = securityRepository.hashData(param.password)!!
+                 passwordHash = withContext(Dispatchers.Default) { securityRepository.hashData(param.password) }!!,
              )
          } catch (e: Exception) {
              logger.debug(e) { "Error registering user." }

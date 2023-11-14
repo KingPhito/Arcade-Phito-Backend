@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pc-api-8818799683784565967-353",
+  "private_key_id": "4bff80cb561b6c388949f5a4d02ce8bd21f70f2e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7cDEAhvdz6crh\nUWzaa6Iv30D0rGp6BtfAvV0EJx3CpuZO/0olAJ7S0+mc82gPNbr6moy8vt60Pt1P\nAflGZ6MqhfHqqUaWDlckoIKWPUMLJ+t8CkxGYWKC8FT2Somc/6s1uohbOcDk7xGI\n5ueiXNO02QqCPsCNSa1z72n9pdCZOD0M1HBAHdsiPjiAy87d5colOIIuGt8EFDzy\nid4uBwIZRk1qT/vmx/6iZKxPa6zb7kD4Hz3S1xa4jsuJu+sPX00f1ZyyaAcab7SN\n3Lp6QkesYOXpcV5F5h5d08C+3ylpqWAGH2HV/LeA+0HyxHOVUP13NJOnfXvuwN+s\nrI0bepRrAgMBAAECggEAC8U+VoWjOXS3iFG4L7ktnKr85cCECTivyMs7cZzROh2H\n/fL7IXq5/oxPMct5P+dEYCNfbiTgUFpYRHNfx4OPlAaITA+oPpkU8NhhivS65pLx\nrz7oTk0kRgu4kiTZInJNupiFopDsY5P9umahqikBJGyyw74UEmtLiKnCsqp8gHqT\nf2Y+yp+jPUYV0Tp8mV8AMGF+ojQogU7iUGJ9B/S3p2YPdQBkPc1BVgdDF2RFi32M\n+uN4+oH23ya2T2/Ta2mo7Yr80JOIzjzL2Tw49vSw5PFyI1QAe8pn2j043hjM8ypX\nlfGwXqsRD2foh5lCT/Gf1WMd2TthMyXbRBzN63ObxQKBgQDvocnuJv1uik+Fg5t+\nnPa/gOltvQDh6uB6La6M+sNaXtFE3ZhfvsV0tBx2p+UDE2Ejw3qbcfHpQttLVgwp\n/m/r6Xh/QMVHIINMhaAF0IHz4ewoGYC6bYBT9hgSmPMBPPzRkrzbzlfRBnSRDTWi\nGrenMJ36+7VHmLOfHFeXwig17wKBgQDIPb3Ufs2jrjZaNGAwqbW/gcY6/vB0YF7M\nXN04OpbAsiu0On4+L3GIc4w42SxY3vhDF3D7dKYEXe8gJl3PO9nODncYDy0pLVwW\niwwkpmnnhETW5PzAGUh71S0aNR7xh9DOQQt7F0LiSBSs4lYf/6gvvV6hG+vh8gZC\ndoNMWy+lRQKBgQDFolbrjsan+3R4dkGxW/15lfVvZ1kp+lAnFDQI2+xwRREtTeGU\n3b72cHGlPvV24u3T1C3ztDdDHbvFV3Ny0wE1vXl+4kmSTvNbEj4XbY8wOF1P+TCd\nESCsnqPd+r04gTc2FWKjmnv8zeknlJBuYMClKEizLhOluAA0suhfJmeJiwKBgEa4\nV5T2+9W1L4kIOni1V3U9di9b3rybVJ/EpHS5bIi95GWQywlXZDeW540kVl9E0FWR\nr9t/RSsBqfSm2Dbaon/9593dbku+s2lazn0bMQgNVOq4kPOfelQR5A3/eOBA4WQW\n4OEmQ/77CiJNBbHjbxj9PrCT1elEuyU6CgErq1YpAoGBANdVXXdDLCo7FFR0RvJL\nyCTwlH0GGNSX8k5B20iOAP4AXtpqWmQHsoQW6q7srEDDkc+2Y4y+jAPQ8Zz5LK2i\n413aRUlcx0KjE1SQvvqNwliErQf162QwjvvM6CLCwLpF9wdizYOOVe7a0kFDOD1D\nWtTfeko3RK2Cu/dtc5j6A7B7\n-----END PRIVATE KEY-----\n",
+  "client_email": "arcade-phito@pc-api-8818799683784565967-353.iam.gserviceaccount.com",
+  "client_id": "111972390072454923659",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/arcade-phito%40pc-api-8818799683784565967-353.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -1,7 +1,7 @@
 <configuration>
-    <appender name="CLOUD" class="com.google.cloud.logging.logback.appender.CloudLoggingAppender">
+    <appender name="CLOUD" class="com.google.cloud.logging.logback.LoggingAppender">
         <projectId>${GOOGLE_CLOUD_PROJECT}</projectId>
-        <logName>my-log</logName>
+        <logName>arcade-phito-log</logName>
     </appender>
 
     <root level="INFO">

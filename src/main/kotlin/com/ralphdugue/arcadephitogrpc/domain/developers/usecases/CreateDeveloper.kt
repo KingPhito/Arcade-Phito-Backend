@@ -7,6 +7,8 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.entities.CreateDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.security.SecureRandom
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -20,8 +22,8 @@ class CreateDeveloper(
         return try {
             val apiKey = generateApiCred(param.devId)
             val apiSecret = generateApiCred()
-            val apiKeyHash = securityRepository.hashData(apiKey)
-            val apiSecretHash = securityRepository.hashData(apiSecret)
+            val apiKeyHash = withContext(Dispatchers.Default) { securityRepository.hashData(apiKey) }
+            val apiSecretHash = withContext(Dispatchers.Default) { securityRepository.hashData(apiSecret) }
             val success = developerRepository.addDeveloperCredentials(
                 devId = param.devId,
                 email = param.email,
@@ -50,6 +52,6 @@ class CreateDeveloper(
         val bytes = ByteArray(32)
         secureRandom.nextBytes(bytes)
 
-        return name + Base64.encode(bytes)
+        return name.lowercase() + Base64.encode(bytes)
     }
 }
