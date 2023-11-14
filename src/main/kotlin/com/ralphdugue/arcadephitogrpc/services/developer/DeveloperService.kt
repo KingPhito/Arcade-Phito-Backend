@@ -1,20 +1,16 @@
-package com.ralphdugue.arcadephitogrpc.services
+package com.ralphdugue.arcadephitogrpc.services.developer
 
 import com.google.rpc.Status
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.CreateDeveloperParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.GenerateDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.ValidateDeveloperParams
-import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.CreateDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.GenerateDeveloperToken
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.ValidateDeveloper
-import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
 import developer.Developer
 import developer.DeveloperServiceGrpcKt
 import developer.authResponse
 import developer.createDeveloperResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class DeveloperService(
     private val createDeveloper: CreateDeveloper,

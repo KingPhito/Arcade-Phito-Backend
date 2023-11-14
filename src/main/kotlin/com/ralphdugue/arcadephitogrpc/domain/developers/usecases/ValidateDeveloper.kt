@@ -14,6 +14,7 @@ class ValidateDeveloper(
     private val securityRepository: SecurityRepository,
     private val logger: KLogger = KotlinLogging.logger {}
 ) : CoroutinesUseCase<ValidateDeveloperParams, Boolean> {
+
     override suspend fun execute(param: ValidateDeveloperParams): Boolean {
         return try {
             val developerAccount = developerRepository.getDeveloperCredentials(param.devId)
@@ -29,6 +30,7 @@ class ValidateDeveloper(
                     hash = developerAccount?.apiSecretHash ?: ""
                 )
             }
+            logger.info { "Validation for API key and secret were $validKey and $validSecret respectively." }
             validKey && validSecret
         } catch (e: Exception) {
             logger.debug(e) { "Error validating developer." }

@@ -10,6 +10,7 @@ class DeveloperRepositoryImpl(
     private val arcadePhitoDB: ArcadePhitoDB,
     private val logger: KLogger = KotlinLogging.logger {}
 ) : DeveloperRepository {
+
     override suspend fun getDeveloperCredentials(devId: String): DeveloperAccount? {
         val row = try {
             arcadePhitoDB.databaseQueries
@@ -51,6 +52,7 @@ class DeveloperRepositoryImpl(
         return if (createdDev != null) {
             createdDev == devId
         } else {
+            logger.warn { "Developer credentials for $devId likely already exist. They could not be added." }
             false
         }
     }

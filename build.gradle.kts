@@ -1,6 +1,4 @@
-import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
-import com.google.protobuf.gradle.*
-import org.gradle.internal.component.model.AttributeMatchingExplanationBuilder.logging
+import com.google.protobuf.gradle.id
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 val kotlin_version: String by project
@@ -18,7 +16,6 @@ plugins {
     id("com.google.protobuf") version "0.9.4"
     id("app.cash.sqldelight") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.google.cloud.tools.appengine") version "2.4.5"
 }
 
 group = "com.ralphdugue.arcadephito-grpc"
@@ -27,20 +24,6 @@ version = "1.0-SNAPSHOT"
 shadow {
     archivesName.set("${project.name}-fat")
     version = ""
-}
-
-appengine {
-    configure<AppEngineAppYamlExtension> {
-        stage {
-            setArtifact("build/libs/${project.name}-fat-all.jar")
-        }
-        deploy {
-            stopPreviousVersion = true
-            version = "GCLOUD_CONFIG"
-            projectId = "GCLOUD_CONFIG"
-            promote = true
-        }
-    }
 }
 
 repositories {
@@ -118,10 +101,6 @@ tasks.shadowJar {
         attributes["Main-Class"] = "com.ralphdugue.arcadephitogrpc.AppKt"
     }
     mergeServiceFiles()
-}
-
-tasks.appengineStage {
-    dependsOn(tasks.shadowJar)
 }
 
 kotlin {

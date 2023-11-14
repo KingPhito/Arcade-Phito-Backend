@@ -1,4 +1,4 @@
-package com.ralphdugue.arcadephitogrpc.services
+package com.ralphdugue.arcadephitogrpc.services.developer
 
 import io.grpc.Status
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.VerifyDeveloperTokenParams
@@ -12,7 +12,7 @@ import io.grpc.ServerInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-class ServiceInterceptor(
+class DevTokenInterceptor(
     private val verifyDeveloperToken: VerifyDeveloperToken,
     private val logger: KLogger = KotlinLogging.logger {}
 ): ServerInterceptor {
@@ -21,6 +21,12 @@ class ServiceInterceptor(
         headers: Metadata?,
         next: ServerCallHandler<ReqT, RespT>?
     ): ServerCall.Listener<ReqT> {
+        val service = call?.methodDescriptor?.serviceName
+        if (service != "developer.DeveloperService") {
+            logger.info { "Service not developer service, skipping token verification" }
+            return next?.startCall(call, headers)!!
+        }
+
         logger.info { "Received headers: $headers" }
         val token = headers?.get(Metadata.Key.of("Authorization" , Metadata.ASCII_STRING_MARSHALLER))
             ?.substring(7)
@@ -39,12 +45,12 @@ class ServiceInterceptor(
             logger.info { "Developer token verified" }
             next?.startCall(call, headers)!!
         } else {
-            logger.info { "Developer token not verified" }
-            call?.close(
+            logger.warn {  "Developer token not verified" }
+            call.close(
                 Status.UNAUTHENTICATED.withDescription("Invalid developer token"),
                 headers
             )
-            next?.startCall(call, headers)!!
+            return object : ServerCall.Listener<ReqT>() {}
         }
     }
 }
