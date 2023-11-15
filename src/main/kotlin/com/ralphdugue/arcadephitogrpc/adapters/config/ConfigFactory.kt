@@ -1,6 +1,7 @@
 package com.ralphdugue.arcadephitogrpc.adapters.config
 
 import com.google.cloud.ServiceOptions
+import com.google.cloud.resourcemanager.v3.ProjectsClient
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient
 import com.google.cloud.secretmanager.v1.SecretVersionName
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.AdminConfig
@@ -18,7 +19,8 @@ object ConfigFactory {
         val env = try {
             val secretClient = SecretManagerServiceClient.create()
             val projectId = ServiceOptions.getDefaultProjectId()
-            getSecret(secretClient, projectId, "env")
+            val projectNumber = System.getenv("PROJECT_NUM") ?: projectId
+            getSecret(secretClient, projectNumber, "env")
         } catch (e: Exception) {
             logger.info { "Error reading env secret from GCP. Using dev configuration." }
             "dev"
@@ -28,8 +30,9 @@ object ConfigFactory {
                 "prod" -> {
                     val secretClient = SecretManagerServiceClient.create()
                     val projectId = ServiceOptions.getDefaultProjectId()
+                    val projectNumber = System.getenv("PROJECT_NUM") ?: projectId
                     logger.info { "Using production configuration" }
-                    getProdConfig(secretClient, projectId)
+                    getProdConfig(secretClient, projectNumber)
                 }
                 else -> {
                     logger.info { "Using development configuration" }
