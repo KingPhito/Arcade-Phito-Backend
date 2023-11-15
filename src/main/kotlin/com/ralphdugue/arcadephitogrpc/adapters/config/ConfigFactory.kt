@@ -1,7 +1,6 @@
 package com.ralphdugue.arcadephitogrpc.adapters.config
 
 import com.google.cloud.ServiceOptions
-import com.google.cloud.resourcemanager.v3.ProjectsClient
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient
 import com.google.cloud.secretmanager.v1.SecretVersionName
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.AdminConfig
