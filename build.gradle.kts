@@ -33,7 +33,7 @@ repositories {
 
 dependencies {
     implementation(platform("io.insert-koin:koin-bom:$koin_version"))
-    implementation(platform("com.google.cloud:libraries-bom:26.25.0"))
+    implementation(platform("com.google.cloud:libraries-bom:26.27.0"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("io.insert-koin:koin-core")
@@ -52,6 +52,7 @@ dependencies {
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("com.google.cloud:google-cloud-secretmanager")
     implementation("com.google.cloud:google-cloud-core")
+    implementation("com.google.cloud:google-cloud-resourcemanager")
     implementation("org.springframework.security:spring-security-core:6.0.3")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
