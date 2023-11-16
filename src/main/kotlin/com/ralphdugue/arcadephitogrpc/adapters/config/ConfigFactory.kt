@@ -1,7 +1,6 @@
 package com.ralphdugue.arcadephitogrpc.adapters.config
 
 import com.google.cloud.ServiceOptions
-import com.google.cloud.resourcemanager.v3.ProjectsClient
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient
 import com.google.cloud.secretmanager.v1.SecretVersionName
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.AdminConfig
@@ -16,15 +15,7 @@ object ConfigFactory {
 
     fun loadConfig(): ArcadePhitoConfig {
         val logger = KotlinLogging.logger {}
-        val env = try {
-            val secretClient = SecretManagerServiceClient.create()
-            val projectId = ServiceOptions.getDefaultProjectId()
-            val projectNumber = System.getenv("PROJECT_NUM") ?: projectId
-            getSecret(secretClient, projectNumber, "env")
-        } catch (e: Exception) {
-            logger.info { "Error reading env secret from GCP. Using dev configuration." }
-            "dev"
-        }
+        val env = System.getenv("ENV") ?: "dev"
         return try {
             when (env) {
                 "prod" -> {
