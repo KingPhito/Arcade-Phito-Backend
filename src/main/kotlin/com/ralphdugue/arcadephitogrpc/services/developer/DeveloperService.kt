@@ -1,7 +1,7 @@
 package com.ralphdugue.arcadephitogrpc.services.developer
 
 import com.google.rpc.Status
-import com.ralphdugue.arcadephitogrpc.domain.developers.entities.CreateDeveloperParams
+import com.ralphdugue.arcadephitogrpc.domain.developers.entities.DeveloperEntities
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.GenerateDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.ValidateDeveloperParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.CreateDeveloper
@@ -19,7 +19,7 @@ class DeveloperService(
 ) : DeveloperServiceGrpcKt.DeveloperServiceCoroutineImplBase() {
 
     override suspend fun createDeveloper(request: Developer.CreateDeveloperRequest): Developer.CreateDeveloperResponse {
-        val params = CreateDeveloperParams(
+        val params = DeveloperEntities(
             devId = request.developerId,
             email = request.email,
         )

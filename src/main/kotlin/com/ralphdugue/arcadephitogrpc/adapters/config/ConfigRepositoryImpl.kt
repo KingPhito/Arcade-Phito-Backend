@@ -34,7 +34,7 @@ class ConfigRepositoryImpl(
                 apiKeyHash = securityRepository.hashData(arcadePhitoConfig.admin.apiKey)!!,
                 apiSecretHash = securityRepository.hashData(arcadePhitoConfig.admin.apiSecret)!!
             )
-            logger.info { "Attempt to create admin credentials returned $result: They likely already exist." }
+            logger.info { "Attempt to create admin credentials returned $result." }
         } catch (e: SQLException) {
             logger.warn(e) { "Error adding developer credentials. They likely already exists." }
         } catch (e: Exception) {
