@@ -22,35 +22,41 @@ class DevTokenInterceptor(
         next: ServerCallHandler<ReqT, RespT>?
     ): ServerCall.Listener<ReqT> {
         val service = call?.methodDescriptor?.serviceName
-        if (service != "developer.DeveloperService") {
-            logger.info { "Service not developer service, skipping token verification" }
-            return next?.startCall(call, headers)!!
-        }
+        return when (service) {
+            "developer.DeveloperService",
+            "user.appuser.AppUserService"-> {
+                logger.info { "Received headers: $headers" }
+                val token = headers?.get(Metadata.Key.of("Authorization" , Metadata.ASCII_STRING_MARSHALLER))
+                    ?.substring(7)
 
-        logger.info { "Received headers: $headers" }
-        val token = headers?.get(Metadata.Key.of("Authorization" , Metadata.ASCII_STRING_MARSHALLER))
-            ?.substring(7)
+                val verified = token?.let {
+                    runBlocking(Dispatchers.IO) {
+                        verifyDeveloperToken.execute(
+                            VerifyDeveloperTokenParams(
+                                token = it
+                            )
+                        )
+                    }
+                } ?: false
 
-        val verified = token?.let {
-            runBlocking(Dispatchers.IO) {
-                verifyDeveloperToken.execute(
-                    VerifyDeveloperTokenParams(
-                        token = it
+                if (verified) {
+                    logger.info { "Developer token verified" }
+                    next?.startCall(call, headers)!!
+                } else {
+                    logger.warn {  "Developer token not verified" }
+                    call.close(
+                        Status.UNAUTHENTICATED.withDescription("Invalid developer token"),
+                        headers
                     )
-                )
+                    object : ServerCall.Listener<ReqT>() {}
+                }
             }
-        } ?: false
-
-        return if (verified) {
-            logger.info { "Developer token verified" }
-            next?.startCall(call, headers)!!
-        } else {
-            logger.warn {  "Developer token not verified" }
-            call.close(
-                Status.UNAUTHENTICATED.withDescription("Invalid developer token"),
-                headers
-            )
-            return object : ServerCall.Listener<ReqT>() {}
+            else -> {
+                logger.info { "" }
+                next?.startCall(call, headers)!!
+            }
         }
+
+
     }
 }

@@ -6,6 +6,7 @@ import com.ralphdugue.arcadephitogrpc.domain.config.entities.ArcadePhitoConfig
 import com.ralphdugue.arcadephitogrpc.services.developer.DeveloperService
 import com.ralphdugue.arcadephitogrpc.services.developer.DevTokenInterceptor
 import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
+import com.ralphdugue.arcadephitogrpc.services.appuser.UserTokenInterceptor
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.grpc.ServerBuilder
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ class ArcadePhitoServer : KoinComponent {
     private val developerService: DeveloperService by inject()
     private val appUserService: AppUserService by inject()
     private val devTokenInterceptor: DevTokenInterceptor by inject()
+    private val userTokenInterceptor: UserTokenInterceptor by inject()
 
     private val config: ArcadePhitoConfig by inject()
 
@@ -32,7 +34,9 @@ class ArcadePhitoServer : KoinComponent {
         .addService(developerService)
         .addService(appUserService)
         //.intercept(devTokenInterceptor)
+        //.intercept(userTokenInterceptor)
         .build()
+
     fun start() {
         runBlocking {
             launch(Dispatchers.IO) {

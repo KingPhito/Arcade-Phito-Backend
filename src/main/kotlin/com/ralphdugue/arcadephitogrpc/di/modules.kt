@@ -9,6 +9,7 @@ import com.ralphdugue.arcadephitogrpc.adapters.config.ConfigRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.developers.DeveloperRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.security.SecurityRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.domain.appusers.AppUserRepository
+import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.GenerateUserToken
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RegisterAppUser
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RetrieveAppUser
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.VerifyLoginAttempt
@@ -20,6 +21,7 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.ValidateDevelop
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
+import com.ralphdugue.arcadephitogrpc.services.appuser.UserTokenInterceptor
 import com.ralphdugue.arcadephitogrpc.services.developer.DeveloperService
 import com.ralphdugue.arcadephitogrpc.services.developer.DevTokenInterceptor
 import org.koin.dsl.module
@@ -46,17 +48,20 @@ val useCases = module {
     single { CreateDeveloper(get(), get()) }
     single { ValidateDeveloper(get(), get()) }
     single { GenerateDeveloperToken(get()) }
+    single { VerifyDeveloperToken(get(), get(), get()) }
+    single { GenerateUserToken(get()) }
+    single { VerifyDeveloperToken(get(), get(), get()) }
     single { RegisterAppUser(get(), get()) }
     single { VerifyLoginAttempt(get(), get()) }
-    single { VerifyDeveloperToken(get(), get(), get()) }
     single { RetrieveAppUser(get()) }
 }
 
 val interceptors = module {
     single { DevTokenInterceptor(get()) }
+    single { UserTokenInterceptor(get()) }
 }
 
 val services = module {
     single { DeveloperService(get(), get(), get()) }
-    single { AppUserService(get(), get()) }
+    single { AppUserService(get(), get(), get()) }
 }

@@ -2,7 +2,7 @@ package com.ralphdugue.arcadephitogrpc.domain.developers.usecases
 
 import com.ralphdugue.arcadephitogrpc.domain.CoroutinesUseCase
 import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
-import com.ralphdugue.arcadephitogrpc.domain.developers.entities.CreateDeveloperParams
+import com.ralphdugue.arcadephitogrpc.domain.developers.entities.DeveloperEntities
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.CreateDeveloperResponse
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
@@ -17,8 +17,8 @@ class CreateDeveloper(
     private val developerRepository: DeveloperRepository,
     private val securityRepository: SecurityRepository,
     private val logger: KLogger = KotlinLogging.logger {}
-) : CoroutinesUseCase<CreateDeveloperParams, Pair<Boolean, CreateDeveloperResponse?>>{
-    override suspend fun execute(param: CreateDeveloperParams): Pair<Boolean, CreateDeveloperResponse?> {
+) : CoroutinesUseCase<DeveloperEntities, Pair<Boolean, CreateDeveloperResponse?>>{
+    override suspend fun execute(param: DeveloperEntities): Pair<Boolean, CreateDeveloperResponse?> {
         return try {
             val apiKey = generateApiCred(param.devId)
             val apiSecret = generateApiCred()

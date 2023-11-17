@@ -2,8 +2,10 @@ package com.ralphdugue.arcadephitogrpc.services.appuser
 
 import com.google.rpc.Status
 import com.google.type.Date
+import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.GenerateUserTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.LoginAttemptParams
 import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.RegisterUserParams
+import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.GenerateUserToken
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RegisterAppUser
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.VerifyLoginAttempt
 import user.*
@@ -13,7 +15,8 @@ import java.time.LocalDate
 
 class AppUserService(
     private val registerAppUser: RegisterAppUser,
-    private val verifyLoginAttempt: VerifyLoginAttempt
+    private val verifyLoginAttempt: VerifyLoginAttempt,
+    private val generateUserToken: GenerateUserToken
 ) : AppUserServiceGrpcKt.AppUserServiceCoroutineImplBase() {
 
     override suspend fun createUser(request: CreateUserRequest): Appuser.CreateUserResponse {
@@ -31,17 +34,34 @@ class AppUserService(
         )
         return when {
             userCreated -> {
-                val user = arcadePhitoUser {
-                    name = request.name
-                    email = request.email
-                    birthdate = request.birthdate
-                }
-                createUserResponse {
-                    appUser = user
-                    status = Status.newBuilder()
-                        .setCode(200)
-                        .setMessage("User created successfully")
-                        .build()
+                val generatedToken = generateUserToken.execute(
+                    GenerateUserTokenParams(
+                        username = request.name,
+                        password = request.password
+                    )
+                )
+                if (!generatedToken.isNullOrBlank()) {
+                    val user = arcadePhitoUser {
+                        name = request.name
+                        email = request.email
+                        birthdate = request.birthdate
+                    }
+                    createUserResponse {
+                        appUser = user
+                        token = generatedToken
+                        status = Status.newBuilder()
+                            .setCode(200)
+                            .setMessage("User created successfully")
+                            .build()
+                    }
+                } else {
+                    createUserResponse {
+                        appUser = ArcadePhitoUser.getDefaultInstance()
+                        status = Status.newBuilder()
+                            .setCode(402)
+                            .setMessage("User could not be created")
+                            .build()
+                    }
                 }
             }
             else -> {
