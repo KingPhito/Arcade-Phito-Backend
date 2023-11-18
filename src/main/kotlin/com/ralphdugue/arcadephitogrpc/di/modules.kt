@@ -9,10 +9,7 @@ import com.ralphdugue.arcadephitogrpc.adapters.config.ConfigRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.developers.DeveloperRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.security.SecurityRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.domain.appusers.AppUserRepository
-import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.GenerateUserToken
-import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RegisterAppUser
-import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.RetrieveAppUser
-import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.VerifyLoginAttempt
+import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.*
 import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
 import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.CreateDeveloper
@@ -54,6 +51,7 @@ val useCases = module {
     single { RegisterAppUser(get(), get()) }
     single { VerifyLoginAttempt(get(), get()) }
     single { RetrieveAppUser(get()) }
+    single { VerifyUserToken(get(), get(), get()) }
 }
 
 val interceptors = module {
