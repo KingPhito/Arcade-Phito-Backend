@@ -33,8 +33,8 @@ class ArcadePhitoServer : KoinComponent {
         .forPort(config.port)
         .addService(developerService)
         .addService(appUserService)
-        //.intercept(devTokenInterceptor)
-        //.intercept(userTokenInterceptor)
+        .intercept(devTokenInterceptor)
+        .intercept(userTokenInterceptor)
         .build()
 
     fun start() {
