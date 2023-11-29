@@ -29,7 +29,7 @@ class DeveloperService(
                 apiKey = response?.apiKey ?: ""
                 apiSecret = response?.apiSecret ?: ""
                 developerId = response?.devId ?: ""
-                result = Status.newBuilder()
+                status = Status.newBuilder()
                     .setCode(200)
                     .setMessage("Developer created successfully")
                     .build()
@@ -39,7 +39,7 @@ class DeveloperService(
                 apiKey = ""
                 apiSecret = ""
                 developerId = ""
-                result = Status.newBuilder()
+                status = Status.newBuilder()
                     .setCode(402)
                     .setMessage("Developer could not be created")
                     .build()
@@ -65,7 +65,7 @@ class DeveloperService(
             if (!generatedToken.isNullOrBlank()) {
                 authResponse {
                     token = generatedToken
-                    result = Status.newBuilder()
+                    status = Status.newBuilder()
                         .setCode(200)
                         .setMessage("Developer authenticated successfully")
                         .build()
@@ -73,7 +73,7 @@ class DeveloperService(
             } else {
                 authResponse {
                     token = ""
-                    result = Status.newBuilder()
+                    status = Status.newBuilder()
                         .setCode(401)
                         .setMessage("Developer could not be authenticated")
                         .build()
@@ -82,7 +82,7 @@ class DeveloperService(
         } else {
             authResponse {
                 token = ""
-                result = Status.newBuilder()
+                status = Status.newBuilder()
                     .setCode(400)
                     .setMessage("Developer could not be authenticated")
                     .build()

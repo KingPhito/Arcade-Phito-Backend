@@ -8,7 +8,6 @@ val sqldelight_version : String by project
 val grpc_version : String by project
 val grpc_kotlin_version : String by project
 val protobuf_version : String by project
-val h2_version : String by project
 
 plugins {
     kotlin("jvm") version "1.9.20"
