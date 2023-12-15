@@ -17,6 +17,7 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.GenerateDevelop
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.ValidateDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperToken
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
+import com.ralphdugue.arcadephitogrpc.services.admin.AdminService
 import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
 import com.ralphdugue.arcadephitogrpc.services.appuser.UserTokenInterceptor
 import com.ralphdugue.arcadephitogrpc.services.developer.DeveloperService
@@ -60,6 +61,7 @@ val interceptors = module {
 }
 
 val services = module {
-    single { DeveloperService(get(), get(), get()) }
+    single { AdminService(get()) }
+    single { DeveloperService(get(), get()) }
     single { AppUserService(get(), get(), get()) }
 }

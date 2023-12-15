@@ -11,5 +11,6 @@ interface DeveloperRepository {
         email: String,
         apiKeyHash: String,
         apiSecretHash: String,
+        isAdmin: Boolean = false
     ): Boolean
 }

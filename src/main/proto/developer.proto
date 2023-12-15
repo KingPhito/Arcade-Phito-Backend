@@ -3,21 +3,7 @@ package  developer;
 import "google/rpc/status.proto";
 
 service DeveloperService {
-    rpc CreateDeveloper(CreateDeveloperRequest) returns (CreateDeveloperResponse) {}
-    rpc AuthenticateDeveloper(AuthRequest) returns (AuthResponse) {}
-}
-
-// CreateDeveloperRequest is the request message for CreateDeveloper.
-message CreateDeveloperRequest {
-    string developerId = 1;
-    string email = 2;
-}
-
-message CreateDeveloperResponse {
-    string apiKey = 1;
-    string apiSecret = 2;
-    string developerId = 3;
-    google.rpc.Status status = 4;
+    rpc AuthenticateDeveloper(AuthRequest) returns (AuthResponse);
 }
 
 message AuthRequest {

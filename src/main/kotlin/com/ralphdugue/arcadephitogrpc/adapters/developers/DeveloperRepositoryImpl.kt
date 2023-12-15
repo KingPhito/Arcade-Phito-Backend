@@ -36,14 +36,16 @@ class DeveloperRepositoryImpl(
         devId: String,
         email: String,
         apiKeyHash: String,
-        apiSecretHash: String
+        apiSecretHash: String,
+        isAdmin: Boolean
     ): Boolean {
         val createdDev = try {
             arcadePhitoDB.databaseQueries.createApiUser(
                 developer_id = devId,
                 email = email,
                 api_key_hash = apiKeyHash,
-                api_secret_hash = apiSecretHash
+                api_secret_hash = apiSecretHash,
+                is_admin = isAdmin
             ).executeAsOneOrNull()
         } catch (e: Exception) {
             logger.debug(e) { "Error adding developer credentials for $devId." }

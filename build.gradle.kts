@@ -3,11 +3,13 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 val kotlin_version: String by project
 val koin_version : String by project
+val koi_ksp_version : String by project
 val mockk_version : String by project
 val sqldelight_version : String by project
 val grpc_version : String by project
 val grpc_kotlin_version : String by project
 val protobuf_version : String by project
+val ksp_version : String by project
 
 plugins {
     kotlin("jvm") version "1.9.20"
@@ -15,6 +17,7 @@ plugins {
     id("com.google.protobuf") version "0.9.4"
     id("app.cash.sqldelight") version "2.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
 }
 
 group = "com.ralphdugue.arcadephito-grpc"
@@ -36,6 +39,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("io.insert-koin:koin-core")
+    implementation("io.insert-koin:koin-annotations")
+    ksp("io.insert-koin:koin-ksp-compiler:$koi_ksp_version")
     implementation("io.insert-koin:koin-logger-slf4j")
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
     implementation("com.google.cloud:google-cloud-logging-logback:0.130.23-alpha")
@@ -56,6 +61,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("io.mockk:mockk:$mockk_version")
+}
+
+sourceSets.main {
+    java.srcDirs("build/generated/ksp/main/kotlin")
 }
 
 protobuf {

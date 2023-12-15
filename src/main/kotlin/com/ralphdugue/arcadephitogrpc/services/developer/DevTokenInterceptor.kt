@@ -23,7 +23,6 @@ class DevTokenInterceptor(
     ): ServerCall.Listener<ReqT> {
         val service = call?.methodDescriptor?.serviceName
         return when (service) {
-            "developer.DeveloperService",
             "user.appuser.AppUserService"-> {
                 logger.info { "Received headers: $headers" }
                 val token = headers?.get(Metadata.Key.of("Authorization" , Metadata.ASCII_STRING_MARSHALLER))
@@ -52,7 +51,7 @@ class DevTokenInterceptor(
                 }
             }
             else -> {
-                logger.info { "" }
+                logger.info { "Not a dev token use case, skipping verification" }
                 next?.startCall(call, headers)!!
             }
         }

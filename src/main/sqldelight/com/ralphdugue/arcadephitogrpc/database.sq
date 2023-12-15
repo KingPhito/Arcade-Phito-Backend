@@ -4,12 +4,13 @@ CREATE TABLE api_credentials (
   email VARCHAR(255) NOT NULL UNIQUE,
   api_key_hash VARCHAR(255) NOT NULL,
   api_secret_hash VARCHAR(255) NOT NULL,
+  is_admin BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (id)
 );
 
 createApiUser:
-INSERT INTO api_credentials (developer_id, email, api_key_hash, api_secret_hash)
-VALUES (?, ?, ?, ?)
+INSERT INTO api_credentials (developer_id, email, api_key_hash, api_secret_hash, is_admin)
+VALUES (?, ?, ?, ?, ?)
 RETURNING developer_id;
 
 getApiUser:

@@ -1,15 +1,15 @@
-package com.ralphdugue.arcadephitogrpc.services.appuser
+package com.ralphdugue.arcadephitogrpc.services.admin
 
-import com.ralphdugue.arcadephitogrpc.domain.appusers.entities.VerifyUserTokenParams
-import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.VerifyUserToken
+import com.ralphdugue.arcadephitogrpc.domain.admin.entities.VerifyAdminTokenParams
+import com.ralphdugue.arcadephitogrpc.domain.admin.usecase.VerifyAdminToken
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.grpc.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-class UserTokenInterceptor(
-    private val verifyUserToken: VerifyUserToken,
+class AdminTokenInterceptor(
+    private val verifyAdminToken: VerifyAdminToken,
     private val logger: KLogger = KotlinLogging.logger {}
 ): ServerInterceptor {
     override fun <ReqT : Any?, RespT : Any?> interceptCall(
@@ -19,21 +19,15 @@ class UserTokenInterceptor(
     ): ServerCall.Listener<ReqT> {
         val service = call?.methodDescriptor?.serviceName
         return when (service) {
-            "admin.AdminService",
-            "developer.DeveloperService",
-            "appuser.AppUserService"-> {
-                logger.info { "Not a user token use case, skipping verification" }
-                next?.startCall(call, headers)!!
-            }
-            else -> {
+            "admin.AdminService"-> {
                 logger.info { "Received headers: $headers" }
                 val token = headers?.get(Metadata.Key.of("Authorization" , Metadata.ASCII_STRING_MARSHALLER))
                     ?.substring(7)
 
                 val verified = token?.let {
                     runBlocking(Dispatchers.IO) {
-                        verifyUserToken.execute(
-                            VerifyUserTokenParams(
+                        verifyAdminToken.execute(
+                            VerifyAdminTokenParams(
                                 token = it
                             )
                         )
@@ -41,17 +35,22 @@ class UserTokenInterceptor(
                 } ?: false
 
                 if (verified) {
-                    logger.info { "User token verified" }
+                    logger.info { "Admin token verified" }
                     next?.startCall(call, headers)!!
                 } else {
-                    logger.warn {  "User token not verified" }
-                    call?.close(
-                        Status.UNAUTHENTICATED.withDescription("Invalid user token"),
+                    logger.warn {  "Admin token not verified" }
+                    call.close(
+                        Status.UNAUTHENTICATED.withDescription("Invalid admin token"),
                         headers
                     )
                     object : ServerCall.Listener<ReqT>() {}
                 }
             }
+            else -> {
+                logger.info { "Not an admin token use case, skipping verification" }
+                next?.startCall(call, headers)!!
+            }
         }
     }
+
 }
