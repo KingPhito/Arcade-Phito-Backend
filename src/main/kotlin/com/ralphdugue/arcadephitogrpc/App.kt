@@ -3,6 +3,8 @@ package com.ralphdugue.arcadephitogrpc
 import com.ralphdugue.arcadephitogrpc.di.*
 import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.ArcadePhitoConfig
+import com.ralphdugue.arcadephitogrpc.services.admin.AdminService
+import com.ralphdugue.arcadephitogrpc.services.admin.AdminTokenInterceptor
 import com.ralphdugue.arcadephitogrpc.services.developer.DeveloperService
 import com.ralphdugue.arcadephitogrpc.services.developer.DevTokenInterceptor
 import com.ralphdugue.arcadephitogrpc.services.appuser.AppUserService
@@ -20,8 +22,11 @@ import org.koin.logger.slf4jLogger
 class ArcadePhitoServer : KoinComponent {
 
     private val configRepository: ConfigRepository by inject()
+
+    private val adminService: AdminService by inject()
     private val developerService: DeveloperService by inject()
     private val appUserService: AppUserService by inject()
+    private val adminTokenInterceptor: AdminTokenInterceptor by inject()
     private val devTokenInterceptor: DevTokenInterceptor by inject()
     private val userTokenInterceptor: UserTokenInterceptor by inject()
 
@@ -31,8 +36,10 @@ class ArcadePhitoServer : KoinComponent {
 
     private val server = ServerBuilder
         .forPort(config.port)
+        .addService(adminService)
         .addService(developerService)
         .addService(appUserService)
+        .intercept(adminTokenInterceptor)
         .intercept(devTokenInterceptor)
         .intercept(userTokenInterceptor)
         .build()

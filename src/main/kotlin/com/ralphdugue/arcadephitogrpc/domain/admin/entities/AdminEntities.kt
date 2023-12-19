@@ -25,6 +25,11 @@ data class VerifyAdminTokenParams(val token: String): Entity
 
 data class CreateAdminParams(
     val devId: String,
+    val email: String
+): Entity
+
+data class CreateAdminResponse(
+    val devId: String,
     val email: String,
     val apiKey: String,
     val apiSecret: String,

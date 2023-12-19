@@ -4,13 +4,13 @@ import com.google.rpc.Status
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.GenerateDeveloperTokenParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.entities.ValidateDeveloperParams
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.GenerateDeveloperToken
-import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.ValidateDeveloper
+import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.VerifyDeveloperCredentials
 import developer.Developer
 import developer.DeveloperServiceGrpcKt
 import developer.authResponse
 
 class DeveloperService(
-    private val validateDeveloper: ValidateDeveloper,
+    private val verifyDeveloperCredentials: VerifyDeveloperCredentials,
     private val generateDeveloperToken: GenerateDeveloperToken
 ) : DeveloperServiceGrpcKt.DeveloperServiceCoroutineImplBase() {
 
@@ -20,7 +20,7 @@ class DeveloperService(
             apiKey = request.apiKey,
             apiSecret = request.apiSecret
         )
-        return if (validateDeveloper.execute(params)) {
+        return if (verifyDeveloperCredentials.execute(params)) {
             val generatedToken = generateDeveloperToken.execute(
                 GenerateDeveloperTokenParams(
                     devId = request.developerId,

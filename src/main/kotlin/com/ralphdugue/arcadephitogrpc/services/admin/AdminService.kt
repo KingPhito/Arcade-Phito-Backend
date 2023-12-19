@@ -4,19 +4,19 @@ import admin.Admin
 import admin.AdminServiceGrpcKt
 import admin.createDeveloperResponse
 import com.google.rpc.Status
-import com.ralphdugue.arcadephitogrpc.domain.developers.entities.DeveloperEntities
-import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.CreateDeveloper
+import com.ralphdugue.arcadephitogrpc.domain.admin.entities.CreateAdminParams
+import com.ralphdugue.arcadephitogrpc.domain.admin.usecase.CreateAdmin
 
 class AdminService(
-    private val createDeveloper: CreateDeveloper,
+    private val createAdmin: CreateAdmin,
 ) : AdminServiceGrpcKt.AdminServiceCoroutineImplBase() {
 
     override suspend fun createDeveloper(request: Admin.CreateDeveloperRequest): Admin.CreateDeveloperResponse {
-        val params = DeveloperEntities(
+        val params = CreateAdminParams(
             devId = request.developerId,
             email = request.email,
         )
-        val (success, response) = createDeveloper.execute(params)
+        val (success, response) = createAdmin.execute(params)
         return if (success) {
             createDeveloperResponse {
                 apiKey = response?.apiKey ?: ""
