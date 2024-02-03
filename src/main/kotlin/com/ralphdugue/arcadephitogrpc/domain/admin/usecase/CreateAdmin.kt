@@ -8,6 +8,8 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.security.SecureRandom
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -18,17 +20,17 @@ class CreateAdmin(
     private val logger: KLogger = KotlinLogging.logger {}
 ) : CoroutinesUseCase<CreateAdminParams, Pair<Boolean, CreateAdminResponse?>> {
 
-    override suspend fun execute(param: CreateAdminParams): Pair<Boolean, CreateAdminResponse?> {
-        return try {
+    override suspend fun execute(param: CreateAdminParams): Pair<Boolean, CreateAdminResponse?> = coroutineScope {
+        try {
             val apiKey = generateApiCred(param.devId)
             val apiSecret = generateApiCred()
-            val hashedKey = securityRepository.hashData(apiKey)
-            val hashedSecret = securityRepository.hashData(apiSecret)
+            val hashedKey = async { securityRepository.hashData(apiKey) }
+            val hashedSecret = async { securityRepository.hashData(apiSecret) }
             val adminAccount = AdminAccount(
                 devId = param.devId,
                 email = param.email,
-                apiKeyHash = hashedKey ?: "",
-                apiSecretHash = hashedSecret ?: ""
+                apiKeyHash = hashedKey.await() ?: "",
+                apiSecretHash = hashedSecret.await() ?: ""
             )
             developerRepository.addDeveloperCredentials(
                 devId = adminAccount.devId,

@@ -1,0 +1,55 @@
+[versions]
+kotlin = "1.9.22"
+ksp = "1.9.22-1.0.17"
+kotlin-coroutines = "1.8.0-RC2"
+kotllin-coroutines-test = "1.7.2"
+kotlin-serialization-json = "1.5.1"
+kotlin-logging = "5.1.0"
+koin = "3.5.3"
+sqldelight = "2.0.1"
+mockk = "1.13.5"
+version-catalog-update = "0.8.1"
+protobuf-gradle-plugin = "0.9.4"
+protobuf = "3.25.1"
+grpc = "1.60.0"
+grpcKotlin = "1.4.1"
+gcloud = "26.27.0"
+gcloud-logback = "0.130.30-alpha"
+postgres = "42.5.4"
+hikari = "5.0.1"
+auth0 = "4.4.0"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-gradle-plugin" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-catalog-update" }
+
+[libraries]
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
+gcloud-bom = { group = "com.google.cloud", name = "libraries-bom", version.ref = "gcloud" }
+kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
+kotlin-logging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
+gcloud-logback = { group = "com.google.cloud", name = "google-cloud-logging-logback", version.ref = "gcloud-logback" }
+grpc = { group = "io.grpc", name = "grpc-protobuf", version.ref = "grpc" }
+grpc-netty = { group = "io.grpc", name = "grpc-netty", version.ref = "grpc" }
+grpc-kotlin = { group = "io.grpc", name = "grpc-kotlin-stub", version.ref = "grpcKotlin" }
+protobuf = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
+protobuf-kotlin = { group = "com.google.protobuf", name = "protobuf-kotlin", version.ref = "protobuf" }
+postgres = { group = "org.postgresql", name = "postgresql", version.ref = "postgres" }
+sqldelight-jdbc = { group = "app.cash.sqldelight", name = "jdbc-driver", version.ref = "sqldelight" }
+sqldelight-coroutines = { group = "app.cash.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
+hikari = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikari" }
+auth0-jwt = { group = "com.auth0", name = "java-jwt", version.ref = "auth0" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotllin-coroutines-test" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
+
+[bundles]
+grpc = ["grpc", "grpc-netty", "grpc-kotlin", "protobuf", "protobuf-kotlin"]
+sqldelight = ["sqldelight-jdbc", "sqldelight-coroutines"]
+test = ["kotlin-coroutines-test", "mockk", "kotlin-test"]

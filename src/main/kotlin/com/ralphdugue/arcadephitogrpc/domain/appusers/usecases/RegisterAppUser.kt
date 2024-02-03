@@ -21,7 +21,7 @@ class RegisterAppUser(
                  username = param.username,
                  email = param.email,
                  birthdate = param.birthdate.toString(),
-                 passwordHash = withContext(Dispatchers.Default) { securityRepository.hashData(param.password) }!!,
+                 passwordHash = securityRepository.hashData(param.password)!!,
              )
          } catch (e: Exception) {
              logger.debug(e) { "Error registering user." }

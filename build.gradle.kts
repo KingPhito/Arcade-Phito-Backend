@@ -1,23 +1,14 @@
 import com.google.protobuf.gradle.id
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
-val kotlin_version: String by project
-val koin_version : String by project
-val koi_ksp_version : String by project
-val mockk_version : String by project
-val sqldelight_version : String by project
-val grpc_version : String by project
-val grpc_kotlin_version : String by project
-val protobuf_version : String by project
-val ksp_version : String by project
-
 plugins {
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.serialization") version "1.9.20"
-    id("com.google.protobuf") version "0.9.4"
-    id("app.cash.sqldelight") version "2.0.0"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.protobuf)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.version.catalog.update)
 }
 
 group = "com.ralphdugue.arcadephito-grpc"
@@ -34,33 +25,26 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.insert-koin:koin-bom:$koin_version"))
-    implementation(platform("com.google.cloud:libraries-bom:26.27.0"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    val koinBom = platform(libs.koin.bom)
+    implementation(koinBom)
+    val gcloudBom = platform(libs.gcloud.bom)
+    implementation(gcloudBom)
+    implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.serialization)
     implementation("io.insert-koin:koin-core")
-    implementation("io.insert-koin:koin-annotations")
-    ksp("io.insert-koin:koin-ksp-compiler:$koi_ksp_version")
     implementation("io.insert-koin:koin-logger-slf4j")
-    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
-    implementation("com.google.cloud:google-cloud-logging-logback:0.130.23-alpha")
-    implementation("io.grpc:grpc-kotlin-stub:$grpc_kotlin_version")
-    implementation("io.grpc:grpc-protobuf:$grpc_version")
-    implementation("io.grpc:grpc-netty:$grpc_version")
-    implementation("com.google.protobuf:protobuf-java:$protobuf_version")
-    implementation("com.google.protobuf:protobuf-kotlin:$protobuf_version")
-    implementation("org.postgresql:postgresql:42.5.4")
-    implementation("app.cash.sqldelight:jdbc-driver:2.0.0")
-    implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
-    implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("com.auth0:java-jwt:4.4.0")
+    implementation(libs.gcloud.logback)
+    implementation(libs.kotlin.logging)
+    implementation(libs.bundles.grpc)
+    implementation(libs.postgres)
+    implementation(libs.bundles.sqldelight)
+    implementation(libs.hikari)
+    implementation(libs.auth0.jwt)
     implementation("com.google.cloud:google-cloud-secretmanager")
     implementation("com.google.cloud:google-cloud-core")
     implementation("com.google.cloud:google-cloud-resourcemanager")
-    implementation("org.springframework.security:spring-security-core:6.0.3")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
-    testImplementation("io.mockk:mockk:$mockk_version")
+    implementation("org.springframework.security:spring-security-core:6.0.8")
+    testImplementation(libs.bundles.test)
 }
 
 sourceSets.main {
@@ -69,14 +53,14 @@ sourceSets.main {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:$protobuf_version"
+        artifact = "com.google.protobuf:protoc:3.25.1"
     }
     plugins {
         id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:$grpc_version"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.60.0"
         }
         id("grpckt") {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpc_kotlin_version}:jdk8@jar"
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.4.1:jdk8@jar"
         }
     }
     generateProtoTasks {
@@ -96,7 +80,7 @@ sqldelight {
     databases {
         create("ArcadePhitoDB") {
             packageName.set("com.ralphdugue.arcadephitogrpc")
-            dialect("app.cash.sqldelight:postgresql-dialect:2.0.0")
+            dialect("app.cash.sqldelight:postgresql-dialect:2.0.1")
         }
     }
 }

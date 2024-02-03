@@ -23,9 +23,7 @@ class VerifyLoginAttempt(
             null
         }
         return if (userAccount != null) {
-            val validPassword = withContext(Dispatchers.Default) {
-                securityRepository.verifyHash(param.password, userAccount.passwordHash)
-            }
+            val validPassword = securityRepository.verifyHash(param.password, userAccount.passwordHash)
             Pair(validPassword, userAccount)
         } else {
             Pair(false, null)

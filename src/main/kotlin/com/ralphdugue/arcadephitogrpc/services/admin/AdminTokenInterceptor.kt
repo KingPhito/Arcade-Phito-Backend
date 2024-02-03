@@ -25,7 +25,7 @@ class AdminTokenInterceptor(
                     ?.substring(7)
 
                 val verified = token?.let {
-                    runBlocking(Dispatchers.IO) {
+                    runBlocking {
                         verifyAdminToken.execute(
                             VerifyAdminTokenParams(
                                 token = it

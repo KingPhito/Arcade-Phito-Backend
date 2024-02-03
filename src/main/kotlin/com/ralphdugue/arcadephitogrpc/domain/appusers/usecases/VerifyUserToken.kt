@@ -22,15 +22,13 @@ class VerifyUserToken(
             val verifier = JWT.decode(param.token)
             val account = appUserRepository.getUserAccount(verifier.getClaim("username").asString())
             account?.let {
-                withContext(Dispatchers.Default) {
-                    val hasAudience = verifier.audience.contains(config.jwt.audience)
-                    val hasIssuer = verifier.issuer == config.jwt.issuer
-                    val verifiedPassword = securityRepository.verifyHash(
-                        hash = account.passwordHash,
-                        data = verifier.getClaim("password").asString()
-                    )
-                    hasAudience && hasIssuer && verifiedPassword
-                }
+                val hasAudience = verifier.audience.contains(config.jwt.audience)
+                val hasIssuer = verifier.issuer == config.jwt.issuer
+                val verifiedPassword = securityRepository.verifyHash(
+                    hash = account.passwordHash,
+                    data = verifier.getClaim("password").asString()
+                )
+                hasAudience && hasIssuer && verifiedPassword
             } ?: false
         } catch (e: Exception) {
             logger.debug(e) { "Error verifying user token." }

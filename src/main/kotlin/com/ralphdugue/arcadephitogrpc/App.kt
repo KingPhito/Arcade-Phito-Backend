@@ -1,7 +1,7 @@
 package com.ralphdugue.arcadephitogrpc
 
 import com.ralphdugue.arcadephitogrpc.di.*
-import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
+import com.ralphdugue.arcadephitogrpc.domain.config.InitRepository
 import com.ralphdugue.arcadephitogrpc.domain.config.entities.ArcadePhitoConfig
 import com.ralphdugue.arcadephitogrpc.services.admin.AdminService
 import com.ralphdugue.arcadephitogrpc.services.admin.AdminTokenInterceptor
@@ -21,7 +21,7 @@ import org.koin.logger.slf4jLogger
 
 class ArcadePhitoServer : KoinComponent {
 
-    private val configRepository: ConfigRepository by inject()
+    private val initRepository: InitRepository by inject()
 
     private val adminService: AdminService by inject()
     private val developerService: DeveloperService by inject()
@@ -45,10 +45,8 @@ class ArcadePhitoServer : KoinComponent {
         .build()
 
     fun start() {
-        runBlocking {
-            launch(Dispatchers.IO) {
-                configRepository.initDatabase()
-            }.join()
+        runBlocking(Dispatchers.IO) {
+            initRepository.initDatabase()
             server.start()
             logger.info { "Server started, listening on ${config.port}" }
             Runtime.getRuntime().addShutdownHook(

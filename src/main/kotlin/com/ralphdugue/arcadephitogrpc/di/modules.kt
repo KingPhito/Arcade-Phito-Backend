@@ -5,7 +5,7 @@ import com.ralphdugue.arcadephitogrpc.ArcadePhitoDB
 import com.ralphdugue.arcadephitogrpc.adapters.DatabaseFactory
 import com.ralphdugue.arcadephitogrpc.adapters.appusers.AppUserRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.config.ConfigFactory
-import com.ralphdugue.arcadephitogrpc.adapters.config.ConfigRepositoryImpl
+import com.ralphdugue.arcadephitogrpc.adapters.config.InitRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.developers.DeveloperRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.adapters.security.SecurityRepositoryImpl
 import com.ralphdugue.arcadephitogrpc.domain.admin.usecase.CreateAdmin
@@ -14,7 +14,7 @@ import com.ralphdugue.arcadephitogrpc.domain.admin.usecase.VerifyAdminCredential
 import com.ralphdugue.arcadephitogrpc.domain.admin.usecase.VerifyAdminToken
 import com.ralphdugue.arcadephitogrpc.domain.appusers.AppUserRepository
 import com.ralphdugue.arcadephitogrpc.domain.appusers.usecases.*
-import com.ralphdugue.arcadephitogrpc.domain.config.ConfigRepository
+import com.ralphdugue.arcadephitogrpc.domain.config.InitRepository
 import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.CreateDeveloper
 import com.ralphdugue.arcadephitogrpc.domain.developers.usecases.GenerateDeveloperToken
@@ -43,7 +43,7 @@ val database = module {
 val repositories = module {
     single<SecurityRepository> { SecurityRepositoryImpl(get()) }
     single<DeveloperRepository> { DeveloperRepositoryImpl(get()) }
-    single<ConfigRepository> { ConfigRepositoryImpl(get(), get(), get(), get()) }
+    single<InitRepository> { InitRepositoryImpl(get(), get(), get(), get()) }
     single<AppUserRepository> { AppUserRepositoryImpl(get()) }
 }
 

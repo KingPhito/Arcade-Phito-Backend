@@ -6,8 +6,7 @@ import com.ralphdugue.arcadephitogrpc.domain.developers.DeveloperRepository
 import com.ralphdugue.arcadephitogrpc.domain.security.SecurityRepository
 import io.github.oshai.kotlinlogging.KLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class VerifyAdminCredentials(
     private val developerRepository: DeveloperRepository,
@@ -15,23 +14,24 @@ class VerifyAdminCredentials(
     private val logger: KLogger = KotlinLogging.logger {}
 ) : CoroutinesUseCase<ValidateAdminParams, Boolean> {
 
-    override suspend fun execute(param: ValidateAdminParams): Boolean {
-        return try {
+    override suspend fun execute(param: ValidateAdminParams): Boolean = coroutineScope {
+        try {
             val adminAccount = developerRepository.getDeveloperCredentials(param.devId)
-            val validKey = withContext(Dispatchers.Default) {
+            val validKey = async {
                 securityRepository.verifyHash(
                     data = param.apiKey,
                     hash = adminAccount?.apiKeyHash ?: ""
                 )
             }
-            val validSecret = withContext(Dispatchers.Default) {
+            val validSecret = async {
                 securityRepository.verifyHash(
                     data = param.apiSecret,
                     hash = adminAccount?.apiSecretHash ?: ""
                 )
             }
+
             logger.info { "Validation for API key and secret were $validKey and $validSecret respectively." }
-            validKey && validSecret
+            validKey.await() && validSecret.await()
         } catch (e: Exception) {
             logger.debug(e) { "Error validating admin." }
             false
